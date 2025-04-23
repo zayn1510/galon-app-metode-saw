@@ -1,17 +1,15 @@
-
-import { getServerAuthToken } from "@/app/utils/getToken.server";
-import Kriteria from "@/components/dashboard/kriteria/kriteria";
+import Users from "@/components/dashboard/users/Users";
 import { Metadata } from "next";
+
 
 export const metadata: Metadata = {
     title: "GalonBest - Pemesanan Galon Air Minum Berkualitas",
     description: "Pesan galon air minum premium dengan layanan terbaik. Kami antar langsung ke rumah Anda!",
   };
-export default async function DashboardPage (){
-  const token = await getServerAuthToken();
+export default function AdminProfilPage (){
     return (
         <div className="min-h-screen flex flex-col">      
-      <Kriteria token={token}/>
+      <Users/>
     </div>
     )
 }

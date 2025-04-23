@@ -38,16 +38,18 @@ export default function Header() {
             </svg>
           </button>
           <div className="flex items-center">
-            <div className="relative h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
-              <Image
-                src="/icon/219983.png"
-                alt="User profile"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-            <span className="ml-2 text-sm font-medium text-gray-700">John Doe</span>
+          <div className="relative h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
+            <Image
+              src="/icon/219983.png"
+              alt="User profile"
+              fill
+              className="object-cover"
+               sizes="(max-width: 768px) 32px, 40px"
+            />
           </div>
+          <span className="ml-2 text-sm font-medium text-gray-700">John Doe</span>
+        </div>
+
         </div>
       </div>
     </header>

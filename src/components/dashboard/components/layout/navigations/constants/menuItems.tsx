@@ -40,26 +40,16 @@ import {
         },
         { 
           name: 'Data User', 
-          path: '/dashboard/user',
+          path: '/dashboard/users',
           icon: <Users className="w-4 h-4" />
         },
       
       ]
     },
+
     { 
-      name: 'Users', 
-      icon: <UserIcon className="w-5 h-5" />,
-      submenu: [
-        { 
-          name: 'User Location', 
-          path: '/dashboard/location',
-          icon: <LocateFixed className="w-4 h-4" />
-        }
-      ]
-    },
-    { 
-      name: 'Settings', 
+      name: 'Pengaturan Akun', 
       icon: <Settings className="w-5 h-5" />,
-      path: '/settings' 
+      path: '/dashboard/profil' 
     },
   ];

@@ -4,6 +4,7 @@ export const API_ENDPOINT ={
     stat:`${base_url}/statistik`,
     kriteria:`${base_url}/kriteria`,
     kecamatan:`${base_url}/kecamatan`,
-    depot:`${base_url}/depot`
-    
+    depot:`${base_url}/depot`,
+    users:`${base_url}/users`,
+    auth:`${base_url}/auth`    
 }
