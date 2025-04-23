@@ -3,30 +3,16 @@
 import Table from "@/components/tables/components/basicTable";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
-import StatsCard from "../components/layout/navigations/components/StatsCard";
 import { API_ENDPOINT } from "@/config/api";
 import { useEffect, useState } from "react";
-import KriteriaModal from "./components/KriteriaModal";
 import Pagination from "../components/Pagination";
-import KriteriaCard from "./components/KriteriaCard";
 import TableControlsBasic from "@/components/tables/components/TableControlBasic";
-import { paginationData } from "@/types/pagination";
 import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
-
-type Kriteria = {
-    id: number;
-    keterangan: string;
-    bobot: number;
-    tipe: number;
-};
-type Props = {
-    token : string | null
-}
-
-export default function Kriteria({token} :Props) {
-    const [kriteriaList, setKriteriaList] = useState<Kriteria[]>([]);
-    const [modalOpen, setModalOpen] = useState(false);
+import { UsersResource } from "@/types/users";
+import UsersCard from "./components/UsersCard";
+export default function Users() {
+    const [usersList, setUsersList] = useState<UsersResource[]>([]);
     const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
         text: "",
         status: null,
@@ -40,7 +26,7 @@ export default function Kriteria({token} :Props) {
       setFilter,
       setSortColumn,
       setSortOrder
-    } = useTableControl({sortColumn:"keterangan",sortOrder:"asc"})
+    } = useTableControl({sortColumn:"name",sortOrder:"asc"})
     // Handlers
     const handleSetMessage = (message: { text: string; status: boolean | null }) => {
       setMessage(message);
@@ -48,7 +34,7 @@ export default function Kriteria({token} :Props) {
 
 
     // Fetch data
-    const GetKriteria = async () => {
+    const GetUsers = async () => {
         try {
             const queryParams = new URLSearchParams({
                 page: table.page.toString(),
@@ -58,21 +44,10 @@ export default function Kriteria({token} :Props) {
                 sortOrder: table.sortOrder
             });
 
-            const res = await fetch(`${API_ENDPOINT.kriteria}?${queryParams.toString()}`,{
-                method: 'GET',
-                headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-                },
-            });
+            const res = await fetch(`${API_ENDPOINT.users}?${queryParams.toString()}`);
             const result = await res.json();
-            if (res.status ==401) {
-                setMessage({text:result.error,status:false})
-                return;
-            }
-            const data: Kriteria[] = result.data;
+            const data: UsersResource[] = result.data;
 
-            // Optional fallback sorting
             const sortedData = [...data].sort((a, b) => {
               const aVal = (a as any)[table.sortColumn];
               const bVal = (b as any)[table.sortColumn];
@@ -84,8 +59,7 @@ export default function Kriteria({token} :Props) {
             if (sortedData.length === 0) {
                 setMessage({ text: "No Data...", status: false });
             }
-
-            setKriteriaList(sortedData);
+            setUsersList(sortedData);
             setTotalData(result.total);
         } catch (error) {
             console.error(error);
@@ -94,7 +68,7 @@ export default function Kriteria({token} :Props) {
     };
 
     useEffect(() => {
-      GetKriteria();
+      GetUsers();
     }, [table.page, table.limit, table.filter, table.sortColumn, table.sortOrder]);
   
     return (
@@ -104,17 +78,9 @@ export default function Kriteria({token} :Props) {
                 <Header />
 
                 <main className="flex-1 p-4">
-                    <KriteriaModal
-                    token={token}
-                        setMessage={handleSetMessage}
-                        refreshData={GetKriteria}
-                        isOpen={modalOpen}
-                        onClose={()=>setModalOpen(false)}
-                    />
-
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                         <TableControlsBasic
-                            name="Cari Kriteria..."
+                            name="Cari Nama..."
                             limit={table.limit}
                             filter={table.filter}
                             onLimitChange={setLimit}
@@ -122,33 +88,22 @@ export default function Kriteria({token} :Props) {
                             sortColumn={table.sortColumn}
                             sortOrder={table.sortOrder}
                             columns={[
-                                { label: "Keterangan", value: "keterangan" },
-                                { label: "Bobot", value: "bobot" },
+                                { label: "Nama", value: "name" },
                             ]}
                             onSortColumnChange={setSortColumn}
                             onSortOrderChange={setSortOrder}
                         />
-
-                        <button
-                            onClick={()=> setModalOpen(true)}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                        >
-                            <Plus className="h-4 w-4" />
-                            Buat Kriteria
-                        </button>
                     </div>
 
-                    <KriteriaCard
-                        token={token}
-                        data={kriteriaList}
-                        refreshData={GetKriteria}
+                    <UsersCard
+                        data={usersList}
+                        refreshData={GetUsers}
                         message={message}
                         setMessage={setMessage}
                         currentPage={table.page}
                         itemsPerPage={table.limit}
                         onPageChange={setPage}
                     />
-
                 <Pagination
                             currentPage={table.page}
                             totalPages={totalData}

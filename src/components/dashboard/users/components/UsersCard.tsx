@@ -4,40 +4,32 @@ import { API_ENDPOINT } from "@/config/api";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { Message } from "../../components/Message";
-import KriteriaModal from "./KriteriaModal";
-
-type Kriteria = {
-  id:number,
-  keterangan:string,
-  bobot:number,
-  tipe:number
-}
+import { UsersResource } from "@/types/users";
 
 type Props = {
-  data: Kriteria[];
+  data: UsersResource[];
   refreshData: () => void;
   message: { text: string; status: boolean | null };
   setMessage: (message: { text: string; status: boolean | null }) => void;
   currentPage:number;
   itemsPerPage:number;
   onPageChange: (page: number) => void;
-  token:string | null
 };
 
-export default function KriteraCard({ data,refreshData,message,setMessage,currentPage,itemsPerPage,onPageChange,token }:Props) {
+export default function UsersCard({ data,refreshData,message,setMessage,currentPage,itemsPerPage,onPageChange }:Props) {
     const [loading, setLoading] = useState(true);
-    const [selectedKriteria, setSelectedKriteria] = useState<Kriteria | null>(null);
+  
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModalConfirm, setIsModalConfirm] = useState(false);
     
-    const [itemToDelete, setItemToDelete] = useState<Kriteria | null>(null);
+    const [itemToDelete, setItemToDelete] = useState<UsersResource | null>(null);
     const startIndex = (currentPage - 1) * itemsPerPage;
 
+    const options = [
+      "active","inactive","banned"
+    ];
     
-    
-    const handleEdit = async (item: Kriteria) => {
-      setSelectedKriteria(item);
-      setIsModalOpen(true)
+    const handleEdit = async (item:UsersResource) => {
     };
   
   const ConfirmationModal = () => {
@@ -48,7 +40,7 @@ export default function KriteraCard({ data,refreshData,message,setMessage,curren
         <div className="bg-white p-6 rounded-lg shadow-lg w-96">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Penghapusan</h3>
           <p className="text-sm text-gray-600 mb-4">
-            Apakah Anda yakin ingin menghapus Kriteria: <strong>{itemToDelete.keterangan}</strong>?
+            Apakah Anda yakin ingin menghapus Pengguna: <strong>{itemToDelete.name}</strong>?
           </p>
           <div className="flex justify-end space-x-4">
             <button
@@ -69,25 +61,21 @@ export default function KriteraCard({ data,refreshData,message,setMessage,curren
     );
   };
   
-  const handleDelete = async (item: Kriteria) => {
+  const handleDelete = async (item: UsersResource) => {
     try {
-        const res = await fetch(API_ENDPOINT.kriteria+"/"+item.id,{
-            method:"DELETE",
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-              },
+        const res = await fetch(API_ENDPOINT.users+"/"+item.id,{
+            method:"DELETE"
         });
         const result = await res.json();
         if (!res.ok) {
             setMessage({
-                text:"Gagal menghapus Kriteria",
+                text:"Gagal menghapus User",
                 status:false
             });
         }
         if (result.status) {
             setMessage({
-                text:"Kriteria berhasil dihapus",
+                text:"Users berhasil dihapus",
                 status:result.status
             });
         }
@@ -111,12 +99,11 @@ export default function KriteraCard({ data,refreshData,message,setMessage,curren
       }
   };
   useEffect(() => {
-    // Simulasi loading selama 1 menit (60 detik)
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000); // 60 detik
+    }, 1000);
 
-    return () => clearTimeout(timer); // Bersihkan timer saat komponen unmount
+    return () => clearTimeout(timer);
   }, []);
 if (loading) {
     return (
@@ -125,7 +112,11 @@ if (loading) {
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-700">#</th>
-              <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-700">Kecamatan</th>
+              <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Name</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Email</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Username</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Role</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Status</th>
               <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-700">Aksi</th>
             </tr>
           </thead>
@@ -137,12 +128,23 @@ if (loading) {
                 </td>
                 <td className="px-4 py-2 border-b text-center">
                   <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
-                  
                 </td>
                 <td className="px-4 py-2 border-b text-center">
                   <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
-                  
                 </td>
+                <td className="px-4 py-2 border-b text-center">
+                  <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
+                </td>
+                <td className="px-4 py-2 border-b text-center">
+                  <div className="w-24 h-6 bg-gray-300 rounded-full"></div>
+                </td>
+                
               </tr>
             ))}
           </tbody>
@@ -150,46 +152,29 @@ if (loading) {
       </div>
     );
   }
-  const handleConfirmDelete = (item: Kriteria) => {
+  const handleConfirmDelete = (item: UsersResource) => {
     setItemToDelete(item);
     setIsModalConfirm(true);
 };
-if (message.text.includes("Token")) {
-  return (
-    <div className="bg-yellow-100 text-yellow-800 p-4 rounded-md shadow">
-        {message.text}
-    </div>
-  );
-}
+
 if (data.length === 0) {
 return (
   <div className="bg-yellow-100 text-yellow-800 p-4 rounded-md shadow">
-    Tidak ada data Kecamatan tersedia.
+    Tidak ada data pengguna tersedia.
   </div>
 );
 }
 
   return (
-    <div className="overflow-x-auto mt-6">
-      {isModalOpen && selectedKriteria && (
- <KriteriaModal setMessage={setMessage}
- token={token}
-         refreshData={refreshData}
-   isOpen={isModalOpen} 
-   selectedKriteria={selectedKriteria}
-   onClose={() => setIsModalOpen(false)}
-  />
-)}
-
-          {isModalConfirm && <ConfirmationModal />}
-          <Message onClear={()=>setMessage({text:"",status:null})} message={message} />
       <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-md">
         <thead className="bg-gray-100">
           <tr>
             <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">#</th>
-            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Kriteria</th>
-            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Bobot</th>
-            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Tipe</th>            
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Name</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Email</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Username</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Role</th>
+            <th className="px-4 py-2 border-b text-left text-sm font-semibold text-gray-700">Status</th>
             <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-700">Aksi</th>
           </tr>
         </thead>
@@ -197,24 +182,34 @@ return (
           {data.map((item, index) => (
             <tr key={item.id} className="hover:bg-gray-50 transition">
               <td className="px-4 py-2 border-b">{startIndex + index + 1}</td>
-              <td className="px-4 py-2 border-b">{item.keterangan}</td>
-              <td className="px-4 py-2 border-b">{item.bobot}</td>
+              <td className="px-4 py-2 border-b">
+                  <a
+                    href={`/dashboard/users/${item.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {item.name}
+                  </a>
+                </td>
+              <td className="px-4 py-2 border-b">{item.email}</td>
+              <td className="px-4 py-2 border-b">{item.username}</td>
+              <td className="px-4 py-2 border-b">{item.role}</td>
               <td
-                className={`px-4 py-2 border-b font-medium text-center ${
-                  item.tipe ? "text-green-600 bg-green-50" : "text-red-600 bg-red-50"
-                }`}
-              >
-                {item.tipe ? "Benefit" : "Cost"}
+                  className={`px-4 py-2 border-b ${
+                    item.status === "active"
+                      ? "text-green-600"
+                      : item.status === "inactive"
+                      ? "text-yellow-600"
+                      : item.status === "banned"
+                      ? "text-red-600"
+                      : ""
+                  }`}
+                >
+                  {item.status}
               </td>
 
               <td className="px-4 py-2 border-b text-center space-x-2">
-                <button
-                  onClick={() => handleEdit(item)}
-                  className="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-blue-600 border border-blue-200 rounded-full hover:bg-blue-50 transition"
-                >
-                  <PencilSquareIcon className="h-4 w-4" />
-                  <span>Edit</span>
-                </button>
                 <button
                   onClick={() => handleConfirmDelete(item)}
                   className="inline-flex items-center justify-center gap-1 px-3 py-1.5 text-sm text-red-600 border border-red-200 rounded-full hover:bg-red-50 transition"
@@ -227,6 +222,5 @@ return (
           ))}
         </tbody>
       </table>
-    </div>
   );
 }

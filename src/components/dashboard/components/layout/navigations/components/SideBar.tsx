@@ -155,20 +155,22 @@ export default function Sidebar() {
 
         {/* Footer Sidebar */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-800/50 bg-blue-900/30 backdrop-blur-sm">
-          <div className="flex items-center space-x-3">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white/20">
-              <Image 
-                src="/user-avatar.jpg" 
-                alt="User profile" 
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <p className="font-medium text-white">John Doe</p>
-              <p className="text-xs text-blue-300/80">Super Admin</p>
-            </div>
-          </div>
+        <div className="flex items-center space-x-3">
+        <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white/20">
+          <Image 
+            src="/icon/219983.png"
+            alt="User profile" 
+            fill
+          sizes="(max-width: 768px) 32px, 40px"
+            className="object-cover"
+          />
+        </div>
+        <div>
+          <p className="font-medium text-white">John Doe</p>
+          <p className="text-xs text-blue-300/80">Super Admin</p>
+        </div>
+      </div>
+
         </div>
       </aside>
 

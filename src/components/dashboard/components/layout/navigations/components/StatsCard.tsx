@@ -1,8 +1,12 @@
+"use client";
+
 import { ChartBarIcon, CurrencyDollarIcon, ShoppingBagIcon, UsersIcon } from "@heroicons/react/16/solid";
 import Card from "../../../Card";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { API_ENDPOINT } from "@/config/api";
+import { getClientAuthToken } from "@/app/utils/getToken";
+import { useRouter } from "next/navigation";
 
 type Stat = {
   kriteria: number;
@@ -10,8 +14,11 @@ type Stat = {
   kecamatan: number;
   depot: number;
 };
+type Props = {
+  token:string | null
+}
 
-export default function StatsCard() {
+export default function StatsCard({token}:Props) {
   const [stats, setStats] = useState<Stat>({
     kriteria: 0,
     kecamatan: 0,
@@ -19,26 +26,57 @@ export default function StatsCard() {
     depot: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const fetchStats = async () => {
+    setLoading(true);
+    setError(null);
+    
     try {
-      const res = await fetch(API_ENDPOINT.stat);
+     
+      const res = await fetch(API_ENDPOINT.stat, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data: ${res.statusText}`);
+      }
+  
       const result = await res.json();
-      const data: Stat = result.data;
-      setStats(data);
+      if (!result.data) {
+        throw new Error('Invalid data format');
+      }
+  
+      setStats(result.data);
     } catch (err) {
-      console.error("Gagal fetch data:", err);
+      console.error("Fetch error:", err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     fetchStats();
   }, []);
 
   if (loading) {
-    return <div className="text-gray-500">Loading statistik...</div>;
+    return (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-8">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="bg-gray-100 rounded-lg p-4 animate-pulse h-32" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500 p-4">{error}</div>;
   }
 
   return (

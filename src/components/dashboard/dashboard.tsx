@@ -12,8 +12,11 @@ const data = [
   { nama: "Riko", email: "riko@example.com", peran: "User" },
 ];
 
+type Props = {
+  token:string | null
+}
 // Komponen utama Dashboard
-export default function Dashboard() {
+export default function Dashboard({token}:Props) {
   return (
     <div className="flex h-screen">
       <Sidebar />  {/* Sidebar di kiri */}
@@ -22,7 +25,7 @@ export default function Dashboard() {
         
         {/* Konten utama */}
         <main className="flex-1 p-4">
-          <StatsCard /> {/* Menampilkan card statistik */}
+          <StatsCard token={token} /> {/* Menampilkan card statistik */}
           <Table columns={columns} data={data} /> {/* Menampilkan tabel */}
         </main>
       </div>

@@ -1,5 +1,6 @@
 import Dashboard from "@/components/dashboard/dashboard";
-import AdminProfile from "@/components/dashboard/components/Profil";
+import AdminProfile from "@/components/dashboard/profil/components/Profil";
+import Profil from "@/components/dashboard/profil/Profil";
 import { Metadata } from "next";
 
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 export default function AdminProfilPage (){
     return (
         <div className="min-h-screen flex flex-col">      
-      <AdminProfile/>
+      <Profil/>
     </div>
     )
 }
