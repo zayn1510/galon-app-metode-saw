@@ -3,6 +3,7 @@ import Sidebar from "@/components/dashboard/components/layout/navigations/compon
 import UserDetailCard from "@/components/dashboard/users/components/UserDetailCard";
 import UserDetail from "@/components/dashboard/users/UserDetail";
 import { API_ENDPOINT } from "@/config/api";
+import { fetchUserByUsername } from "@/lib/services/userService";
 import { UsersResource } from "@/types/users";
 import { Metadata } from "next";
 import React from "react";
@@ -14,9 +15,9 @@ export const metadata: Metadata = {
 
 
 export default async function UserDetailPage({ params }: { params: { id: string } }) {
-  const { id } = await params; // ✅ Sesuai update Next.js
- 
+  const { id } = await params;
+   const user = await fetchUserByUsername();
   return (
-    <UserDetail id={id} />
+    <UserDetail user={user} id={id} />
   );
 }

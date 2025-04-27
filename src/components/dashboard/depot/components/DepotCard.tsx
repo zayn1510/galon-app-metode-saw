@@ -70,7 +70,7 @@ export default function DepotCard({
 
   const handleDelete = async (item: DepotResource) => {
     try {
-      const res = await fetch(`${API_ENDPOINT.depot}/${item.id}`, { method: "DELETE" });
+      const res = await fetch(`${API_ENDPOINT.depot}/${item.id}`, { method: "DELETE", credentials:"include" });
       const result = await res.json();
       if (!res.ok || !result.status) {
         setMessage({
@@ -114,8 +114,8 @@ export default function DepotCard({
 
   if (loading) {
     return (
-      <div className="overflow-x-auto mt-6">
-        <table className="min-w-full border border-gray-200 bg-white shadow-sm rounded-md">
+      <div className="overflow-x-auto rounded-2xl shadow-md border border-gray-200">
+        <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2 border-b text-center text-sm font-semibold text-gray-700">#</th>
@@ -145,10 +145,17 @@ export default function DepotCard({
     );
   }
 
+  if (!message.status) {
+    return (
+      <div className="bg-yellow-100 text-yellow-800 p-4 rounded-md shadow">
+        {message.text}
+      </div>
+    );
+  }
   if (data.length === 0) {
     return (
       <div className="bg-yellow-100 text-yellow-800 p-4 rounded-md shadow">
-        Tidak ada data Kecamatan tersedia.
+        Tidak ada data Depot tersedia.
       </div>
     );
   }

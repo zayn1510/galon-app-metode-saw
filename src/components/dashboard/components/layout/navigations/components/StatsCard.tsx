@@ -14,11 +14,7 @@ type Stat = {
   kecamatan: number;
   depot: number;
 };
-type Props = {
-  token:string | null
-}
-
-export default function StatsCard({token}:Props) {
+export default function StatsCard() {
   const [stats, setStats] = useState<Stat>({
     kriteria: 0,
     kecamatan: 0,
@@ -39,8 +35,9 @@ export default function StatsCard({token}:Props) {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
+        credentials: 'include',
+
       });
   
       if (!res.ok) {

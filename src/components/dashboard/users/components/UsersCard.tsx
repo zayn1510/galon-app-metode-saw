@@ -64,7 +64,8 @@ export default function UsersCard({ data,refreshData,message,setMessage,currentP
   const handleDelete = async (item: UsersResource) => {
     try {
         const res = await fetch(API_ENDPOINT.users+"/"+item.id,{
-            method:"DELETE"
+            method:"DELETE",
+            credentials:"include"
         });
         const result = await res.json();
         if (!res.ok) {

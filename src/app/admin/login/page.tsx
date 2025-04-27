@@ -63,6 +63,13 @@ export default function Login() {
 
       const result = await res.json();
       const data: TokenResource = result.data;
+      if (data.role !=='admin') {
+        setMessage({
+          text: "Akses terbatas - Hanya untuk Administrator sistem",
+          status: false
+        });
+          return;
+      }
 
       // Set token via API route
       const tokenResponse = await fetch('/api/set-token', {

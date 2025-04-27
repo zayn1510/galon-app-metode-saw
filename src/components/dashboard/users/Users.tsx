@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
 import { UsersResource } from "@/types/users";
 import UsersCard from "./components/UsersCard";
-export default function Users() {
+export default function Users({user}:{user:UsersResource}) {
     const [usersList, setUsersList] = useState<UsersResource[]>([]);
     const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
         text: "",
@@ -44,7 +44,10 @@ export default function Users() {
                 sortOrder: table.sortOrder
             });
 
-            const res = await fetch(`${API_ENDPOINT.users}?${queryParams.toString()}`);
+            const res = await fetch(`${API_ENDPOINT.users}?${queryParams.toString()}`,{
+                method : "GET",
+                credentials:"include"
+            });
             const result = await res.json();
             const data: UsersResource[] = result.data;
 
@@ -73,10 +76,9 @@ export default function Users() {
   
     return (
         <div className="flex h-screen">
-            <Sidebar />
+            <Sidebar user={user} />
             <div className="flex-1 flex flex-col ml-0 lg:ml-64 xl:ml-70 2xl:ml-80">
-                <Header />
-
+                <Header user={user} />
                 <main className="flex-1 p-4">
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                         <TableControlsBasic

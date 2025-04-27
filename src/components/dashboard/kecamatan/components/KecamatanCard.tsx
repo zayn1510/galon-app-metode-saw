@@ -66,7 +66,8 @@ export default function KecamatanCard({ data,refreshData,message,setMessage,curr
   const handleDelete = async (item: KecamatanResource) => {
     try {
         const res = await fetch(API_ENDPOINT.kecamatan+"/"+item.id,{
-            method:"DELETE"
+            method:"DELETE",
+            credentials: 'include',
         });
         const result = await res.json();
         if (!res.ok) {

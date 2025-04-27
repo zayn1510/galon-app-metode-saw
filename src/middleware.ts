@@ -4,8 +4,6 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
 
-  console.log('Middleware token check:', token); // Debugging
-
   // Proteksi route dashboard
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!token) {

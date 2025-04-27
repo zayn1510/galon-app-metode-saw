@@ -6,5 +6,8 @@ export const API_ENDPOINT ={
     kecamatan:`${base_url}/kecamatan`,
     depot:`${base_url}/depot`,
     users:`${base_url}/users`,
-    auth:`${base_url}/auth`    
+    auth:`${base_url}/auth`,
+    loginLogs:`${base_url}/login-logs`,
+    user:`${base_url}/`,
+    userLocation:`${base_url}/user-locations`
 }

@@ -33,6 +33,24 @@
     background-position: 200% 0;
   }
 }
+/* styles/globals.css */
+@keyframes bounce-horizontal {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+@keyframes progress-bar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+.animate-bounce-horizontal {
+  animation: bounce-horizontal 1s infinite;
+}
+
+.animate-progress-bar {
+  animation: progress-bar 3s linear forwards;
+}
 
 
 
