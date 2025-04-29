@@ -1,11 +1,15 @@
 "use client"
 
-import { UsersResource } from '@/types/users';
+import decodeJWT from '@/app/utils/decodeJwt';
+import { UseAuthUser } from '@/hooks/useAuthUser';
+import { UpdateUserRequest, UsersResource } from '@/types/users';
+import { jwtDecode } from 'jwt-decode';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AdminProfile = ({users} :{users:UsersResource}) => {
+const AdminProfile = ({users,token} :{users:UsersResource,token:string}) => {
   const [formData, setFormData] = useState<UsersResource>({
     id: users.id ?? 0,
     name: users.name ?? '',
@@ -13,14 +17,18 @@ const AdminProfile = ({users} :{users:UsersResource}) => {
     email: users.email ?? '',
     role: users.role ?? '',
     status: users.status ?? 'active',
+    nomor_handphone:users.nomor_handphone ?? ''
   });
-  
+  const router = useRouter();
   const [profileImage, setProfileImage] = useState('/icon/219983.png');
   const [isEditing, setIsEditing] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const usernameold = users.username;
+  const {logoutAdmin} = UseAuthUser();
 
+  const {updateUser} = UseAuthUser();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -51,13 +59,36 @@ const AdminProfile = ({users} :{users:UsersResource}) => {
     }
   };
 
-  const handleSaveChanges = (e: React.FormEvent) => {
+  const handleSaveChanges = async (e: React.FormEvent) => {
+  
     e.preventDefault();
     setIsEditing(false);
-    toast.success('Profile updated successfully!', {
-      position: "top-right",
-      autoClose: 3000,
-    });
+     const payload :UpdateUserRequest  = {
+          nama:formData.name,
+          nomor_handphone:formData.nomor_handphone,
+          role:formData.role,
+          username:formData.username,
+          status:formData.status,
+          confirm_password:""
+        }
+      
+        toast.success('Profile updated successfully!', {
+          position: "top-right",
+          autoClose: 1000,
+        }); 
+        const res = await updateUser(formData.id,payload,token);
+        if ((res.status) && ((usernameold !== formData.username))) {
+          const response = await logoutAdmin();
+          if (response.success) {
+            router.push('../admin/login');
+            router.refresh(); 
+          } else {
+            console.error('Logout failed');
+          }
+        } else {
+          window.location.reload();
+        }
+    
   };
 
   const handlePasswordUpdate = (e: React.FormEvent) => {
@@ -155,7 +186,7 @@ const AdminProfile = ({users} :{users:UsersResource}) => {
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
                   <input
                     type="text"
                     id="name"
@@ -167,12 +198,12 @@ const AdminProfile = ({users} :{users:UsersResource}) => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Nomor Handphone</label>
                   <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
+                    type="text"
+                    id="nomor_handphone"
+                    name="nomor_handphone"
+                    value={formData.nomor_handphone}
                     onChange={handleChange}
                     disabled
                     className="w-full px-4 py-3 border border-transparent bg-gray-50 rounded-lg cursor-not-allowed"

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Power, Bell, ChevronDown } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { UsersResource } from '@/types/users';
+import { UseAuthUser } from '@/hooks/useAuthUser';
 
 type Props = {
   user:UsersResource
@@ -16,6 +17,7 @@ export default function Header({user}:Props) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const segments = pathname.split('/').filter(Boolean);
+  const {logoutAdmin}= UseAuthUser();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -49,23 +51,14 @@ export default function Header({user}:Props) {
   });
 
   const handleLogout = async () => {
-    try {
-      // Call API route to clear server-side cookies
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'same-origin', // Important for cookies
-      });
-  
-      if (response.ok) {
-        // Redirect to login page with cache clearing
-        router.push('/login');
-        router.refresh(); // Important to clear client cache
-      } else {
-        console.error('Logout failed');
-        // Consider adding toast notification here
-      }
-    } catch (error) {
-      console.error('Error during logout:', error);
+    const response = await logoutAdmin();
+    if (response.success) {
+      // Redirect to login page with cache clearing
+      router.push('admin/login');
+      router.refresh(); // Important to clear client cache
+    } else {
+      console.error('Logout failed');
+      // Consider adding toast notification here
     }
   };
   return (

@@ -12,42 +12,45 @@ import { Ratings } from "@/types/rating";
 import { getServerAuthTokenUser } from "../utils/getToken.server";
 import { jwtDecode } from "jwt-decode";
 import { UserToken } from "@/types/login";
+import Profil from "@/components/dashboard/profil/Profil";
+import UserProfil from "@/components/home/UserProfil";
+import { UseAuthUser } from "@/hooks/useAuthUser";
+import { UsersResource } from "@/types/users";
 
 
-export async function getRatings(): Promise<Ratings[]>{
-
-    const params = new URLSearchParams({
-        page: "0",
-        limit: "3",
-      });
-      
-      const res = await fetch(`${API_ENDPOINT.user}user/rating?${params.toString()}`);
-
-  const result = await res.json();
-
-  if (!res.ok) {
-    console.error("Failed to fetch user:", res.status, result);
-   
-  }
-
-  return result.data;
-}
-
-export default async function HomePage(){
+export default async function ProfilPage(){
   const user_token = await getServerAuthTokenUser();
+  const {detailUser} = UseAuthUser();
   
   let decoded: UserToken | null = null;
 
   if (user_token) {
     decoded = jwtDecode<UserToken>(user_token);
   }
-    const ratings = await getRatings();
+  const username = decoded?.username ?? '';
+  const token = user_token ?? '';
+  const data = await detailUser(username,token);
+
+  let user: UsersResource = {
+    id: 0,
+    name: '',
+    email: '',
+    username: '',
+    role: '',
+    status: '',
+    nomor_handphone:''
+  };
+  
+  // Pastikan data.status true dan data.data valid
+  if (data.status && data.data) {
+      user = data.data;
+  }
+   console.info(user);
     return (
        <>
        <Header decoded={decoded}/>
-       <HeroSection user_token={user_token}/>
+        <UserProfil token={user_token} user={user}/>
        <WhyUs/>
-       <Testimonials initData={ratings}/>
        <Footer />
        </>
     )

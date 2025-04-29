@@ -6,7 +6,6 @@ import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { LoginRequest, TokenResource } from '@/types/login';
 import { API_ENDPOINT } from '@/config/api';
 import { useRouter } from 'next/navigation';
-
 interface AuthModalProps {
   show: boolean;
   onClose: () => void;
@@ -100,10 +99,9 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
        }
   };
 
-  function daftarAkun(event: MouseEvent<HTMLButtonElement, MouseEvent>) {
-      window.location.href="signup";
+  const daftarAkun = (event: MouseEvent<HTMLButtonElement>): void => {
+    window.location.href = "signup";
   }
-
   return (
     <AnimatePresence>
       {show && (

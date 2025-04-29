@@ -7,7 +7,7 @@ import { API_ENDPOINT } from "@/config/api";
 import decodeJWT from "@/app/utils/decodeJwt";
 
 // Komponen utama Dashboard
-export default async function Profil({user} : {user:UsersResource}) {
+export default async function Profil({user,token} : {user:UsersResource,token:string}) {
   return (
     <div className="flex h-screen">
       <Sidebar user={user} />  {/* Sidebar di kiri */}
@@ -16,7 +16,7 @@ export default async function Profil({user} : {user:UsersResource}) {
         
         {/* Konten utama */}
         <main className="flex-1 p-4">
-            <AdminProfile users={user}/>
+            <AdminProfile token={token ?? ''} users={user}/>
         </main>
       </div>
     </div>

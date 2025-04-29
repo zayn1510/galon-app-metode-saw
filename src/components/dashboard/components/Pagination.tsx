@@ -69,7 +69,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pr
       {visiblePages.map((page, index) => {
         if (page === 'left-ellipsis' || page === 'right-ellipsis') {
           return (
-            <span key={index} className="px-3 py-1 text-gray-500">
+            <span key={page} className="px-3 py-1 text-gray-500">
               <FaEllipsisH className="w-4 h-4" />
             </span>
           );

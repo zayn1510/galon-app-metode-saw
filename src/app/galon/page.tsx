@@ -20,7 +20,7 @@ export async function getRatings(): Promise<Ratings[]>{
 
     const params = new URLSearchParams({
         page: "0",
-        limit: "10",
+        limit: "3",
       });
       
       const res = await fetch(`${API_ENDPOINT.user}user/rating?${params.toString()}`);
@@ -97,7 +97,7 @@ export default async function GalonPage(){
     if (res?.status) {
 
     }
-    const userLocation: UserLocation | null = res?.status ? res.data : {
+    const userLocation: UserLocation  | null= res?.status ? res.data : {
       id:0,
       user_id:0,
       longitude:0,
@@ -111,7 +111,6 @@ export default async function GalonPage(){
        <Header decoded={decoded}/>
         <ProductGalon user_location={userLocation} user_token={user_token} decoded ={decoded} depots={depots}/>
        <WhyUs/>
-       <Testimonials initData={ratings}/>
        <Footer />
        </>
     )

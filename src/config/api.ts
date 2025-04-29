@@ -9,5 +9,7 @@ export const API_ENDPOINT ={
     auth:`${base_url}/auth`,
     loginLogs:`${base_url}/login-logs`,
     user:`${base_url}/`,
-    userLocation:`${base_url}/user-locations`
+    userLocation:`${base_url}/user-locations`,
+    ratingDepot:`${base_url}/rating`
+    
 }

@@ -27,7 +27,7 @@ export default function TestimonialGrid({initData}:{initData:Ratings[]}) {
       
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: "10",
+        limit: "3",
       });
       
       const res = await fetch(`${API_ENDPOINT.user}user/rating?${params.toString()}`);

@@ -1,10 +1,20 @@
-import { Logout, SignUp } from "@/services/AuthUser";
-import { UserRequest } from "@/types/users";
+import { Detailuser, Logout, LogoutAdmin, SignUp, Updateuser } from "@/services/AuthUser";
+import { UpdateUserRequest, UserRequest } from "@/types/users";
 
 export const UseAuthUser = () => {
     const logout = async () => {
         try {
             const response = await Logout();
+            return response;
+        } catch (err: any) {
+          console.error("Logout error:", err);
+          throw err; 
+        }
+      };
+
+      const logoutAdmin = async () => {
+        try {
+            const response = await LogoutAdmin();
             return response;
         } catch (err: any) {
           console.error("Logout error:", err);
@@ -24,5 +34,35 @@ export const UseAuthUser = () => {
           throw error; // <= Penting!
         }
       }
-    return {logout,signUp};
+
+      const detailUser = async (username:string,token:string): Promise<ApiResponse<null>> => {
+        try {
+            const response = await Detailuser(username,token);
+            const data: ApiResponse<null> = await response.json();
+            if (!response.ok) {
+                throw new Error("error in server :"+data.message)
+            }
+            return data;
+        } catch (error) {
+          console.error("SignUp error:", error);
+          throw error;
+        }
+      }
+
+      const updateUser = async (id:number,user:UpdateUserRequest,token:string): Promise<ApiResponse<null>> => {
+        try {
+            const response = await Updateuser(id,user,token);
+            const data: ApiResponse<null> = await response.json();
+            if (!response.ok) {
+                throw new Error("error in server :"+data.message)
+            }
+            return data;
+        } catch (error) {
+          console.error("SignUp error:", error);
+          throw error;
+        }
+      }
+      
+      
+    return {logout,signUp,detailUser,updateUser,logoutAdmin};
 }

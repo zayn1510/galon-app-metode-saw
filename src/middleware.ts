@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!token) {
       console.log('Redirecting to login - no token found');
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL('../admin/login', request.url));
     }
 
     try {
@@ -25,7 +25,7 @@ export function middleware(request: NextRequest) {
       }
     } catch (err) {
       console.log('Invalid token:', err);
-      const response = NextResponse.redirect(new URL('/login', request.url));
+      const response = NextResponse.redirect(new URL('../admin/login', request.url));
       // Hapus cookie yang invalid
       response.cookies.delete('token');
       return response;

@@ -12,8 +12,8 @@ export const useSendLocation = () => {
     try {
       const payload: UserLocationRequest = {
         userid: decoded?.id ?? 0,
-        latitude: lat,
-        longitude: lon,
+        latitude: lat ?? 0,
+        longitude: lon ?? 0,
       };
 
       const res = await sendUserLocation(payload, token);

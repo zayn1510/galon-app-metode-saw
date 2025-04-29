@@ -9,8 +9,13 @@ import { UserLocation } from '@/types/users'
 import { useEffect, useState } from 'react'
 import useGeolocation from '@/hooks/useGeoLocation'
 import { useSendLocation } from '@/hooks/useSendLocation'
+import { Ratings } from '@/types/rating'
 
-export default function ProductGalon({ depots, decoded, user_token, user_location }: { depots: ProductsResources[], decoded: UserToken | null, user_token: string, user_location: UserLocation }) {
+export default function ProductGalon({ depots, decoded, user_token, user_location }:
+   { depots: ProductsResources[],
+     decoded: UserToken | null,
+     user_token: string,
+     user_location: UserLocation | null }) {
 
   const [checkingLocation, setCheckingLocation] = useState(false);
   const { latitude, longitude, location, error, startGeolocationWatch } = useGeolocation();
@@ -69,7 +74,7 @@ export default function ProductGalon({ depots, decoded, user_token, user_locatio
         </div>
 
         {/* Cek apakah user_location ada atau id user_location 0 */}
-        {user_location.id === 0 ? (
+        {user_location?.id === 0 ? (
           <div className="text-center col-span-full">
             <p className="text-lg text-red-600 mb-4">
               Lokasi Anda belum terdaftar atau tidak terdeteksi. 

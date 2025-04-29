@@ -28,7 +28,7 @@ type Location = {
   depot?: string
 }
 
-export default function NavigationButtons({ productLocation, decoded,user_token }: { productLocation: Location, decoded: UserToken | null,user_token:string }) {
+export default function NavigationButtons({ productLocation, decoded,user_token }: { productLocation: Location, decoded: UserToken | null,user_token:string | null }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [location, setLocation] = useState<string>("Lokasi belum dideteksi.")
@@ -44,7 +44,8 @@ export default function NavigationButtons({ productLocation, decoded,user_token 
     setError(null)
 
     try {
-      const response = await sendLocation(latitude,longitude,user_token, { id: decoded?.id });
+      const token = user_token ?? "";
+      const response = await sendLocation(latitude,longitude,token, { id: decoded?.id });
       if (response.status) {
         const url = `https://www.google.com/maps/dir/?api=1` +
         `&origin=${latitude},${longitude}` +
