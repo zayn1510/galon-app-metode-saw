@@ -2,7 +2,7 @@
 
 import decodeJWT from '@/app/utils/decodeJwt';
 import { UseAuthUser } from '@/hooks/useAuthUser';
-import { UpdateUserRequest, UsersResource } from '@/types/users';
+import { UpdatePasswordRequest, UpdateUserRequest, UsersResource } from '@/types/users';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -26,9 +26,8 @@ const AdminProfile = ({users,token} :{users:UsersResource,token:string}) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const usernameold = users.username;
-  const {logoutAdmin} = UseAuthUser();
+  const {updateUser,logoutAdmin,updatePassword} = UseAuthUser();
 
-  const {updateUser} = UseAuthUser();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -91,16 +90,32 @@ const AdminProfile = ({users,token} :{users:UsersResource,token:string}) => {
     
   };
 
-  const handlePasswordUpdate = (e: React.FormEvent) => {
+  const handlePasswordUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match', { position: "top-right" });
+      toast.error('Password Dan Konfirmasi salah', { position: "top-right" });
       return;
     }
-    toast.success('Password updated successfully!', { position: "top-right" });
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
+    const payload:UpdatePasswordRequest ={
+      username:formData.username,
+      password:currentPassword,
+      new_password:newPassword,
+      confirm_new_password:confirmPassword
+    }
+    const res = await updatePassword(payload)
+    if (res.status) {
+      toast.success('Password updated successfully!', { position: "top-right",autoClose:2000 });
+      const response = await logoutAdmin();
+      setTimeout(()=>{
+        if (response.success) {
+          router.push('../admin/login');
+            router.refresh(); 
+      } else {
+          console.error('Logout failed');
+      }
+      },2000);
+  
+    }
   };
 
   const getStatusStyle = (status: string) => {

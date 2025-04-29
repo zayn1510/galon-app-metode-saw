@@ -93,6 +93,18 @@ export default function Dashboard({user}:Props) {
         
         {/* Konten utama */}
         <main className="flex-1 p-4">
+
+          {/* Ucapan Selamat Datang */}
+          <div className="bg-white shadow-md border border-gray-200 rounded-2xl p-6 mb-6 transition duration-300 hover:shadow-lg">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          👋 Selamat datang, <span className="text-blue-600">{user.name}</span>
+        </h2>
+        <p className="mt-2 text-gray-600 text-base leading-relaxed">
+          Anda login sebagai <span className="font-semibold">Admin</span>. Selamat menggunakan <span className="font-medium text-blue-500">Aplikasi Rekomendasi Galon</span> dengan metode <span className="font-bold text-green-600">SAW (Simple Additive Weighting)</span>. Semoga membantu dalam pengambilan keputusan terbaik!
+        </p>
+      </div>
+
+
           <StatsCard /> {/* Menampilkan card statistik */}
           <div className="container mx-auto px-4 py-8">
         

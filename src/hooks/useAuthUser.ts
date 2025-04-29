@@ -1,5 +1,5 @@
-import { Detailuser, Logout, LogoutAdmin, SignUp, Updateuser } from "@/services/AuthUser";
-import { UpdateUserRequest, UserRequest } from "@/types/users";
+import { Detailuser, Logout, LogoutAdmin, SignUp, UpdatePassword, Updateuser } from "@/services/AuthUser";
+import { UpdatePasswordRequest, UpdateUserRequest, UserRequest } from "@/types/users";
 
 export const UseAuthUser = () => {
     const logout = async () => {
@@ -62,7 +62,21 @@ export const UseAuthUser = () => {
           throw error;
         }
       }
+
+      const updatePassword = async (update:UpdatePasswordRequest): Promise<ApiResponse<null>> => {
+        try {
+            const response = await UpdatePassword(update);
+            const data: ApiResponse<null> = await response.json();
+            if (!response.ok) {
+                throw new Error("error in server :"+data.message)
+            }
+            return data;
+        } catch (error) {
+          console.error("SignUp error:", error);
+          throw error;
+        }
+      }
       
       
-    return {logout,signUp,detailUser,updateUser,logoutAdmin};
+    return {logout,signUp,detailUser,updateUser,logoutAdmin,updatePassword};
 }

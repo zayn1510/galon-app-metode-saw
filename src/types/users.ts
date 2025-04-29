@@ -39,4 +39,11 @@ export type UpdateUserRequest = {
     confirm_password:string
 }
 
+export type UpdatePasswordRequest = {
+    username:string,
+    password:string,
+    new_password:string,
+    confirm_new_password:string
+}
+
 
