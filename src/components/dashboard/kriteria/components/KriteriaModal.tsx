@@ -26,10 +26,9 @@ type KriteriaModalProps = {
   refreshData: () => void;
   setMessage: (message: { text: string; status: boolean | null }) => void;
   selectedKriteria?: Kriteria | null;
-  token : string | null
 };
 
-export default function KriteriaModal({ isOpen, onClose,refreshData,setMessage,selectedKriteria,token}:KriteriaModalProps) {
+export default function KriteriaModal({ isOpen, onClose,refreshData,setMessage,selectedKriteria}:KriteriaModalProps) {
   const [formData, setFormData] = useState<KriteriaRequest>({
     keterangan: "",
     bobot: 0,
@@ -96,8 +95,8 @@ const tipeRef = useRef<HTMLSelectElement>(null);
             method,
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
               },
+            credentials: 'include',
             body: JSON.stringify(payload),
           });
         if (!res.ok) {

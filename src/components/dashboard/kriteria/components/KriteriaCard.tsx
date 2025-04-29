@@ -21,10 +21,9 @@ type Props = {
   currentPage:number;
   itemsPerPage:number;
   onPageChange: (page: number) => void;
-  token:string | null
 };
 
-export default function KriteraCard({ data,refreshData,message,setMessage,currentPage,itemsPerPage,onPageChange,token }:Props) {
+export default function KriteraCard({ data,refreshData,message,setMessage,currentPage,itemsPerPage,onPageChange}:Props) {
     const [loading, setLoading] = useState(true);
     const [selectedKriteria, setSelectedKriteria] = useState<Kriteria | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,8 +74,8 @@ export default function KriteraCard({ data,refreshData,message,setMessage,curren
             method:"DELETE",
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
               },
+            credentials : 'include'
         });
         const result = await res.json();
         if (!res.ok) {
@@ -173,7 +172,6 @@ return (
     <div className="overflow-x-auto mt-6">
       {isModalOpen && selectedKriteria && (
  <KriteriaModal setMessage={setMessage}
- token={token}
          refreshData={refreshData}
    isOpen={isModalOpen} 
    selectedKriteria={selectedKriteria}

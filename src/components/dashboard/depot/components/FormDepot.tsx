@@ -5,6 +5,7 @@ import { KecamatanResource } from '@/types/kecamatan';
 import { paginationData } from '@/types/pagination';
 import { useRouter } from 'next/navigation';
 import React, { useState, useRef, useEffect } from 'react';
+import OptionListKecamatan from './OptionListKecamatan';
 
 
 
@@ -31,11 +32,15 @@ const CreateDepotForm = () => {
   const [pagination,setPagination] = useState<paginationData>({
       page:1,
       limit:100,
-      total:0
+      total:0,
+      filter:""
     })
   const GetKecamatan = async () => {
           try {
-              const res = await fetch(API_ENDPOINT.kecamatan+"?page="+pagination.page+"&limit="+pagination.limit)
+              const res = await fetch(API_ENDPOINT.kecamatan+"?page="+pagination.page+"&limit="+pagination.limit,{
+                method:"GET",
+                credentials:"include"
+              })
               const result = await res.json();
               const data: KecamatanResource[] = result.data;       
               setKecamatan(data);
@@ -110,6 +115,7 @@ const handleChange = (
         const response = await fetch(API_ENDPOINT.depot, {
           method: 'POST',
           body: formPayload,
+          credentials:"include"
         });
   
         if (!response.ok) {
@@ -137,6 +143,8 @@ const handleChange = (
       e.currentTarget.value = "";
     }
   }
+
+  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -214,11 +222,7 @@ const handleChange = (
                     className="mt-1 block w-full pl-3 pr-10 py-3 text-base border-blue-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
                   >
                     <option value="">Pilih Kecamatan</option>
-                      {kecamatan.map((item,index) =>
-                      (
-                        <option value={item.id} key={index}>{item.nama_kecamatan}</option>
-                      )
-                      )}
+                    <OptionListKecamatan kecamatan={kecamatan}/>
                   </select>
                 </div>
 

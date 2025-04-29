@@ -14,10 +14,11 @@ import { KecamatanResource } from "@/types/kecamatan";
 import TableControlsBasic from "@/components/tables/components/TableControlBasic";
 import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
+import { UsersResource } from "@/types/users";
 
 
 // Komponen utama Dashboard
-export default function Kecamatan() {
+export default function Kecamatan({user}:{user:UsersResource}) {
     const [kecamatanList,setKecamatan] = useState<KecamatanResource[]>([])
     const [modalOpen, setModalOpen] = useState(false);
     const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
@@ -49,7 +50,9 @@ export default function Kecamatan() {
             sortColumn: table.sortColumn,
             sortOrder: table.sortOrder
         });
-        const res = await fetch(`${API_ENDPOINT.kecamatan}?${queryParams.toString()}`);
+        const res = await fetch(`${API_ENDPOINT.kecamatan}?${queryParams.toString()}`,{
+          credentials: 'include',
+        });
             const result = await res.json();
             const data: KecamatanResource[] = result.data;    
 
@@ -79,9 +82,9 @@ export default function Kecamatan() {
 
   return (
     <div className="flex h-screen">
-      <Sidebar />  {/* Sidebar di kiri */}
+      <Sidebar user={user}/>  {/* Sidebar di kiri */}
       <div className="flex-1 flex flex-col ml-0 lg:ml-64 xl:ml-70 2xl:ml-80"> {/* Konten utama */}
-        <Header /> {/* Header di atas */}
+        <Header user={user} /> {/* Header di atas */}
         
         {/* Konten utama */}
         <main className="flex-1 p-4">

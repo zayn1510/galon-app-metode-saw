@@ -1,6 +1,7 @@
 
 import { getServerAuthToken } from "@/app/utils/getToken.server";
 import Kriteria from "@/components/dashboard/kriteria/kriteria";
+import { fetchUserByUsername } from "@/lib/services/userService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,10 +9,10 @@ export const metadata: Metadata = {
     description: "Pesan galon air minum premium dengan layanan terbaik. Kami antar langsung ke rumah Anda!",
   };
 export default async function DashboardPage (){
-  const token = await getServerAuthToken();
+ const user = await fetchUserByUsername();
     return (
         <div className="min-h-screen flex flex-col">      
-      <Kriteria token={token}/>
+      <Kriteria user={user}/>
     </div>
     )
 }

@@ -53,6 +53,7 @@ export default function UserDetailCard({ user, id }: Props) {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ status }),
+                credentials:"include"
             });
 
             if (!response.ok) {

@@ -4,13 +4,11 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
 
-  console.log('Middleware token check:', token); // Debugging
-
   // Proteksi route dashboard
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!token) {
       console.log('Redirecting to login - no token found');
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL('../admin/login', request.url));
     }
 
     try {
@@ -27,7 +25,7 @@ export function middleware(request: NextRequest) {
       }
     } catch (err) {
       console.log('Invalid token:', err);
-      const response = NextResponse.redirect(new URL('/login', request.url));
+      const response = NextResponse.redirect(new URL('../admin/login', request.url));
       // Hapus cookie yang invalid
       response.cookies.delete('token');
       return response;

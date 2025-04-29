@@ -51,6 +51,7 @@ export default function KecamatanModal({ isOpen, onClose,refreshData,setMessage,
             headers: {
               "Content-Type": "application/json", 
             },
+            credentials: 'include',
             body: JSON.stringify(payload),
           });
         const result = await res.json();

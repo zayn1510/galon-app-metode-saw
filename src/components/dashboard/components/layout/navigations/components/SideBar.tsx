@@ -6,8 +6,12 @@ import Image from 'next/image';
 import { ChevronDown, ChevronUp, Menu, Bell, X } from 'lucide-react';
 import { useMenu } from '../hooks/useMenu';
 import { useEffect, useState } from 'react';
+import { UsersResource } from '@/types/users';
 
-export default function Sidebar() {
+type Props = {
+  user:UsersResource
+}
+export default function Sidebar({user}:Props) {
   const router = useRouter();
   const pathname = usePathname();
   const { menuItems, activeMenu, openSubmenu, toggleSubmenu } = useMenu();
@@ -166,8 +170,8 @@ export default function Sidebar() {
           />
         </div>
         <div>
-          <p className="font-medium text-white">John Doe</p>
-          <p className="text-xs text-blue-300/80">Super Admin</p>
+          <p className="font-medium text-white">{user.name}</p>
+          <p className="text-xs text-blue-300/80">{user.role}</p>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import Dashboard from "@/components/dashboard/dashboard";
 import { Metadata } from "next";
 import { getServerAuthToken } from "../utils/getToken.server";
+import { fetchUserByUsername } from "@/lib/services/userService";
 
 
 export const metadata: Metadata = {
@@ -8,10 +9,10 @@ export const metadata: Metadata = {
     description: "Pesan galon air minum premium dengan layanan terbaik. Kami antar langsung ke rumah Anda!",
   };
 export default async function DashboardPage (){
-  const token = await getServerAuthToken();
+  const user = await fetchUserByUsername();
     return (
         <div className="min-h-screen flex flex-col">      
-      <Dashboard token={token}/>
+      <Dashboard user={user}/>
     </div>
     )
 }

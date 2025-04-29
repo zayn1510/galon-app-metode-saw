@@ -32,7 +32,8 @@ const EditDepotForm = () => {
   const [pagination,setPagination] = useState<paginationData>({
       page:1,
       limit:100,
-      total:0
+      total:0,
+      filter:""
     })
  const { id } = useParams();
   const [message, setMessage] = useState<{ text: string; status: boolean }>({
@@ -41,7 +42,10 @@ const EditDepotForm = () => {
   });
   const DetailDepot = async () => {
     try {
-      const res = await fetch(API_ENDPOINT.depot + '/' + id);
+      const res = await fetch(API_ENDPOINT.depot + '/' + id,{
+        method:"GET",
+        credentials:"include"
+      });
       const result = await res.json();
 
       if (!res.ok) {
@@ -90,7 +94,10 @@ const EditDepotForm = () => {
 
   const GetKecamatan = async () => {
           try {
-              const res = await fetch(API_ENDPOINT.kecamatan+"?page="+pagination.page+"&limit="+pagination.limit)
+              const res = await fetch(API_ENDPOINT.kecamatan+"?page="+pagination.page+"&limit="+pagination.limit,{
+                method:"GET",
+                credentials:"include"
+              })
               const result = await res.json();
               const data: KecamatanResource[] = result.data;       
               setKecamatan(data);
@@ -171,6 +178,7 @@ const handleChange = (
         const response = await fetch(API_ENDPOINT.depot+"/update/"+id, {
           method: 'POST',
           body: formPayload,
+          credentials:"include"
         });
   
         if (!response.ok) {

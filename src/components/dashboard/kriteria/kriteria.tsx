@@ -13,6 +13,7 @@ import TableControlsBasic from "@/components/tables/components/TableControlBasic
 import { paginationData } from "@/types/pagination";
 import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
+import { UsersResource } from "@/types/users";
 
 type Kriteria = {
     id: number;
@@ -20,11 +21,11 @@ type Kriteria = {
     bobot: number;
     tipe: number;
 };
-type Props = {
-    token : string | null
-}
 
-export default function Kriteria({token} :Props) {
+type Props = {
+  user:UsersResource
+}
+export default function Kriteria({user}:Props) {
     const [kriteriaList, setKriteriaList] = useState<Kriteria[]>([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
@@ -62,8 +63,8 @@ export default function Kriteria({token} :Props) {
                 method: 'GET',
                 headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
                 },
+                credentials: 'include',
             });
             const result = await res.json();
             if (res.status ==401) {
@@ -99,13 +100,12 @@ export default function Kriteria({token} :Props) {
   
     return (
         <div className="flex h-screen">
-            <Sidebar />
+            <Sidebar user={user}/>
             <div className="flex-1 flex flex-col ml-0 lg:ml-64 xl:ml-70 2xl:ml-80">
-                <Header />
+                <Header user={user} />
 
                 <main className="flex-1 p-4">
                     <KriteriaModal
-                    token={token}
                         setMessage={handleSetMessage}
                         refreshData={GetKriteria}
                         isOpen={modalOpen}
@@ -139,7 +139,6 @@ export default function Kriteria({token} :Props) {
                     </div>
 
                     <KriteriaCard
-                        token={token}
                         data={kriteriaList}
                         refreshData={GetKriteria}
                         message={message}
