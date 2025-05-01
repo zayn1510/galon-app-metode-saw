@@ -1,9 +1,7 @@
 "use client"
-
-import decodeJWT from '@/app/utils/decodeJwt';
 import { UseAuthUser } from '@/hooks/useAuthUser';
 import { UpdatePasswordRequest, UpdateUserRequest, UsersResource } from '@/types/users';
-import { jwtDecode } from 'jwt-decode';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -140,11 +138,13 @@ const AdminProfile = ({users,token} :{users:UsersResource,token:string}) => {
             <div className="flex flex-col sm:flex-row items-center space-y-6 sm:space-y-0 sm:space-x-8">
               <div className="relative group">
                 <div className="w-28 h-28 rounded-full border-4 border-white/30 overflow-hidden shadow-xl">
-                  <img
-                    src={profileImage}
-                    alt="Admin Avatar"
-                    className="w-full h-full object-cover"
-                  />
+                <Image
+  src={profileImage}
+  alt="Admin Avatar"
+  width={500} // wajib: tentukan width & height atau gunakan fill
+  height={500}
+  className="w-full h-full object-cover"
+/>
                 </div>
                 <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                   <input

@@ -6,6 +6,7 @@ import { paginationData } from '@/types/pagination';
 import { useRouter } from 'next/navigation';
 import React, { useState, useRef, useEffect } from 'react';
 import OptionListKecamatan from './OptionListKecamatan';
+import Image from 'next/image';
 
 
 
@@ -29,7 +30,7 @@ const CreateDepotForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [kecamatan,setKecamatan] = useState<KecamatanResource[]>([]);
-  const [pagination,setPagination] = useState<paginationData>({
+  const [pagination] = useState<paginationData>({
       page:1,
       limit:100,
       total:0,
@@ -76,10 +77,6 @@ const handleChange = (
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -373,7 +370,14 @@ const handleChange = (
                 <div className="space-y-1 text-center">
                   {previewImage ? (
                     <div className="relative">
-                      <img src={previewImage} alt="Preview" className="mx-auto h-48 w-auto rounded-md object-cover" />
+                     <Image
+  src={previewImage}
+  alt="Preview"
+  width={300}
+  height={200}
+  className="mx-auto rounded-md object-cover"
+  style={{ height: '12rem', width: 'auto' }}
+/>
                       <button
                         type="button"
                         onClick={() => {

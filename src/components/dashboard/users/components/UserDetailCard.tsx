@@ -23,10 +23,6 @@ export default function UserDetailCard({ user, id }: Props) {
     const userEmail = user?.email || 'No email provided';
     const userUsername = user?.username ? `@${user.username}` : 'No username';
     const userRole = user?.role || 'Unknown role';
-    const userStatus = status ?
-        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() :
-        'Unknown';
-
     const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setStatus(e.target.value);
     };

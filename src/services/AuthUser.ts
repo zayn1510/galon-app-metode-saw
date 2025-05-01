@@ -21,7 +21,7 @@ export const Logout = async () => {
     }
 
     return data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Logout error:', error);
   }
 };
@@ -44,7 +44,7 @@ export const LogoutAdmin = async () => {
     }
 
     return data;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Logout error:', error);
   }
 };

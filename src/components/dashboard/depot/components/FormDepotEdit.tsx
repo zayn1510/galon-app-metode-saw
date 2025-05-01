@@ -3,6 +3,7 @@ import { API_ENDPOINT } from '@/config/api';
 import { UpdateDepotRequest } from '@/types/depot';
 import { KecamatanResource } from '@/types/kecamatan';
 import { paginationData } from '@/types/pagination';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -134,10 +135,6 @@ const handleChange = (
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -443,7 +440,14 @@ const handleChange = (
                 <div className="space-y-1 text-center">
                   {previewImage ? (
                     <div className="relative">
-                      <img src={previewImage} alt="Preview" className="mx-auto h-48 w-auto rounded-md object-cover" />
+                      <div className="relative mx-auto h-48 w-auto">
+                        <Image
+                          src={previewImage}
+                          alt="Preview"
+                          fill
+                          className="rounded-md object-cover"
+                        />
+                      </div>
                       <button
                         type="button"
                         onClick={() => {

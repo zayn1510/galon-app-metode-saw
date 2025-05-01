@@ -41,7 +41,7 @@ export default function TestimonialCard({ testi }: { testi: Ratings }) {
       <h3 className="text-blue-600 font-semibold mb-2 text-lg line-clamp-1">{testi.depot}</h3>
       
       <div className="relative mb-4 flex-grow">
-        <div className="absolute top-0 left-0 text-6xl text-gray-100 font-serif leading-none">"</div>
+        <div className="absolute top-0 left-0 text-6xl text-gray-100 font-serif leading-none"></div>
         <p className="text-gray-700 pl-6 pt-4 relative z-10 italic line-clamp-4">
           {testi.komentar}
         </p>

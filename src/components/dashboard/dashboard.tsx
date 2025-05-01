@@ -4,7 +4,7 @@ import Sidebar from './components/layout/navigations/components/SideBar';
 import Header from './components/layout/navigations/components/Header';
 import StatsCard from './components/layout/navigations/components/StatsCard';
 import { UsersResource } from '@/types/users';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useTableControl from '@/hooks/useTablePagination';
 import { API_ENDPOINT } from '@/config/api';
 import { LoginLastResource } from '@/types/login';
@@ -30,54 +30,53 @@ export default function Dashboard({user}:Props) {
   const [loginLogs,setLoginLogs] =useState<LoginLastResource[]>([]);
 
         // Fetch data
-  const GetKriteria = async () => {
-    try {
+        const GetKriteria = useCallback(async () => {
+          try {
             const queryParams = new URLSearchParams({
-                    page: table.page.toString(),
-                    limit: table.limit.toString(),
-                    filter: table.filter,
-                    sortColumn: table.sortColumn,
-                    sortOrder: table.sortOrder
+              page: table.page.toString(),
+              limit: table.limit.toString(),
+              filter: table.filter,
+              sortColumn: table.sortColumn,
+              sortOrder: table.sortOrder,
             });
-    
-                const res = await fetch(`${API_ENDPOINT.loginLogs}?${queryParams.toString()}`,{
-                    method: 'GET',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    credentials: 'include',
-                });
-                const result = await res.json();
-                if (res.status ==401) {
-                  
-                    return;
-                }
-                const data: LoginLastResource[] = result.data;
-                interface TableData {
-                  [key: string]: string | number;
-                }
-                // Optional fallback sorting
-                const sortedData = [...data].sort((a: TableData, b: TableData) => {
-                  const aVal = a[table.sortColumn];
-                  const bVal = b[table.sortColumn];
-                
-                  if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
-                  if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
-                  return 0;
-                });
-    
-
-                setLoginLogs(sortedData);
-                setTotalData(result.total);
-            } catch (error) {
-                console.error(error);
-               
+        
+            const res = await fetch(`${API_ENDPOINT.loginLogs}?${queryParams.toString()}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+            });
+        
+            const result = await res.json();
+            if (res.status === 401) return;
+        
+            const data: LoginLastResource[] = result.data;
+        
+            interface TableData {
+              [key: string]: string | number;
             }
-        };
+        
+            const sortedData = [...data].sort((a: TableData, b: TableData) => {
+              const aVal = a[table.sortColumn];
+              const bVal = b[table.sortColumn];
+        
+              if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
+              if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
+              return 0;
+            });
+        
+            setLoginLogs(sortedData);
+            setTotalData(result.total);
+          } catch (error) {
+            console.error(error);
+          }
+        }, [table.page, table.limit, table.filter, table.sortColumn, table.sortOrder]);
+        
     
         useEffect(() => {
           GetKriteria();
-        }, [table.page, table.limit, table.filter, table.sortColumn, table.sortOrder]);
+        }, [GetKriteria]);
 
   return (
     <div className="flex h-screen">

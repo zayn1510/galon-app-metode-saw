@@ -1,20 +1,15 @@
 
 import { UsersResource } from "@/types/users";
-import { API_ENDPOINT } from "@/config/api";
 import Sidebar from "../components/layout/navigations/components/SideBar";
 import Header from "../components/layout/navigations/components/Header";
 import UserDetailCard from "./components/UserDetailCard";
-import { getServerAuthToken } from "@/app/utils/getToken.server";
-import decodeJWT from "@/app/utils/decodeJwt";
-
+import { useParams } from "next/navigation";
 
 type Props = {
-  id: string;
   user:UsersResource
 };
 
-export async function UserDetail({ id,user }: Props) {
-  
+export async function UserDetail({ user }: Props) {
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar user={user} />

@@ -5,13 +5,14 @@ import { DepotResource } from '@/types/depot';
 import Sidebar from '../components/layout/navigations/components/SideBar';
 import Header from '../components/layout/navigations/components/Header';
 import { MapPin, Phone, Star, ChevronLeft, Clock, DollarSign, Percent, Navigation, Info } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { API_ENDPOINT } from '@/config/api';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UsersResource } from '@/types/users';
+import Image from 'next/image';
 
 type Props = {
   user:UsersResource
@@ -24,7 +25,7 @@ export default function DepotPreview({user}:Props) {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('info');
 
-  const DetailDepot = async () => {
+  const DetailDepot = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(API_ENDPOINT.depot + '/' + id, {
@@ -32,12 +33,12 @@ export default function DepotPreview({user}:Props) {
         credentials: "include"
       });
       const result = await res.json();
-
+  
       if (!res.ok) {
         toast.error('Gagal memuat data depot', { position: 'top-right' });
         return;
       }
-
+  
       if (result.status) {
         const { data } = result;
         setDepot(data);
@@ -58,13 +59,13 @@ export default function DepotPreview({user}:Props) {
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [id]);
   useEffect(() => {
     if (id) {
       DetailDepot();
     }
-  }, [id]);
+  }, [id, DetailDepot]);
+  
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -105,13 +106,17 @@ export default function DepotPreview({user}:Props) {
                 {/* Hero Image */}
                 <div className="relative h-80 bg-gradient-to-r from-gray-100 to-gray-200 overflow-hidden">
                   {depot?.foto ? (
-                    <img
-                      src={`http://localhost:8022/api/v1/depot/preview/${depot.foto}?v=${
-                        depot.updated_at ? new Date(depot.updated_at).getTime() : ''
-                      }`}
-                      alt={depot.nama_depot}
-                      className="w-full h-full object-cover transition-all duration-500 hover:scale-105"
-                    />
+                  <div className="relative w-full h-64"> {/* pastikan ada tinggi */}
+                  <Image
+                    src={`http://localhost:8022/api/v1/depot/preview/${depot.foto}?v=${
+                      depot.updated_at ? new Date(depot.updated_at).getTime() : ''
+                    }`}
+                    alt={depot.nama_depot}
+                    fill
+                    className="object-cover transition-all duration-500 hover:scale-105"
+                  />
+                </div>
+                
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gray-200">
                       <span className="text-gray-400">Tidak ada gambar tersedia</span>
@@ -286,11 +291,15 @@ export default function DepotPreview({user}:Props) {
                         >
                           <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                             {otherDepot.foto && (
-                              <img 
+                              
+                              <div className="relative w-full h-64"> {/* Ubah `h-64` sesuai kebutuhan */}
+                              <Image 
                                 src={`http://localhost:8022/api/v1/depot/preview/${otherDepot.foto}`} 
                                 alt={otherDepot.nama_depot}
-                                className="w-full h-full object-cover"
+                                fill
+                                className="object-cover"
                               />
+                            </div>
                             )}
                           </div>
                           <div className="flex-1 min-w-0">

@@ -28,7 +28,7 @@ export default function UnauthorizedRedirect() {
                 <div className="space-y-3">
                     <h1 className="text-3xl font-bold text-gray-800">Access Restricted</h1>
                     <p className="text-gray-600 text-lg">
-                        You don't have permission to view this page
+                        You dont have permission to view this page
                     </p>
                 </div>
 

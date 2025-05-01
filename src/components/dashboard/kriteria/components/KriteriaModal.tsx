@@ -121,7 +121,7 @@ const tipeRef = useRef<HTMLSelectElement>(null);
            
     } catch (error) {
       setMessage({
-        text: 'Terjadi kesalahan saat menambahkan kriteria.',
+        text: 'Terjadi kesalahan saat menambahkan kriteria. '+error,
         status: false
     });
     } finally {

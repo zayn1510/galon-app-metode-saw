@@ -44,22 +44,13 @@ export default async function GalonPage() {
   let decoded: UserToken | null = null;
   decoded = jwtDecode<UserToken>(user_token);
   const id = decoded?.id ?? null;
-  const { fetchCheckUserLocation } = useSendLocation();
-  const res = await fetchCheckUserLocation(id, user_token);
 
-  const userLocation: UserLocation | null = res?.status ? res.data : {
-    id: 0,
-    user_id: 0,
-    longitude: 0,
-    latitude: 0
-  };
-
-  const depots = res?.status ? await getProducts(id, user_token) : [];
+  const depots = await getProducts(id, user_token);
 
   return (
     <>
       <Header decoded={decoded} />
-      <ProductGalon user_location={userLocation} user_token={user_token} decoded={decoded} depots={depots} />
+      <ProductGalon id={id} user_token={user_token} decoded={decoded} depots={depots} />
       <WhyUs />
       <Footer />
     </>

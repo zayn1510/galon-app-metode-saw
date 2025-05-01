@@ -42,7 +42,7 @@ export default function HeroSection({user_token}:{user_token:string | null}) {
     setShowProModal(false);
   };
 
-  const handleRekomendasi = ({ currentTarget }: MouseEvent<HTMLButtonElement>) => {
+  const handleRekomendasi = ({ }: MouseEvent<HTMLButtonElement>) => {
     if (user_token === null) {
       setShowProModal(true);
       return;

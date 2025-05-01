@@ -1,9 +1,7 @@
 "use client";
 
-import { API_ENDPOINT } from "@/config/api";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import {TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { Message } from "../../components/Message";
 import { UsersResource } from "@/types/users";
 
 type Props = {
@@ -16,89 +14,15 @@ type Props = {
   onPageChange: (page: number) => void;
 };
 
-export default function UsersCard({ data,refreshData,message,setMessage,currentPage,itemsPerPage,onPageChange }:Props) {
+export default function UsersCard({ data,currentPage,itemsPerPage }:Props) {
     const [loading, setLoading] = useState(true);
   
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalConfirm, setIsModalConfirm] = useState(false);
+
+    const [, setIsModalConfirm] = useState(false);
     
-    const [itemToDelete, setItemToDelete] = useState<UsersResource | null>(null);
+    const [, setItemToDelete] = useState<UsersResource | null>(null);
     const startIndex = (currentPage - 1) * itemsPerPage;
 
-    const options = [
-      "active","inactive","banned"
-    ];
-    
-    const handleEdit = async (item:UsersResource) => {
-    };
-  
-  const ConfirmationModal = () => {
-    if (!itemToDelete) return null;
-  
-    return (
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Konfirmasi Penghapusan</h3>
-          <p className="text-sm text-gray-600 mb-4">
-            Apakah Anda yakin ingin menghapus Pengguna: <strong>{itemToDelete.name}</strong>?
-          </p>
-          <div className="flex justify-end space-x-4">
-            <button
-              onClick={() => setIsModalConfirm(false)}
-              className="px-4 py-2 bg-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-400 transition"
-            >
-              Batal
-            </button>
-            <button
-              onClick={() => handleDelete(itemToDelete)}
-              className="px-4 py-2 bg-red-600 rounded-md text-sm text-white hover:bg-red-700 transition"
-            >
-              Hapus
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-  
-  const handleDelete = async (item: UsersResource) => {
-    try {
-        const res = await fetch(API_ENDPOINT.users+"/"+item.id,{
-            method:"DELETE",
-            credentials:"include"
-        });
-        const result = await res.json();
-        if (!res.ok) {
-            setMessage({
-                text:"Gagal menghapus User",
-                status:false
-            });
-        }
-        if (result.status) {
-            setMessage({
-                text:"Users berhasil dihapus",
-                status:result.status
-            });
-        }
-    } catch (error) {
-        setMessage({
-            text: "Terjadi kesalahan, coba lagi nanti.",
-            status:false,
-          });
-    } finally {
-      const index = data.findIndex(d => d.id === item.id);
-      const isLastItemOnPage = data.length === 1;
-      
-      if (currentPage > 1 && isLastItemOnPage) {
-          onPageChange(currentPage - 1);
-      } else {
-          refreshData();
-      }
-      
-    
-        setIsModalConfirm(false);
-      }
-  };
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);

@@ -76,7 +76,7 @@ export default function KecamatanModal({ isOpen, onClose,refreshData,setMessage,
             setFormData({nama_kecamatan:""}); // Reset     
     } catch (error) {
       setMessage({
-        text: 'Terjadi kesalahan saat menambahkan Kecamatan.',
+        text: 'Terjadi kesalahan saat menambahkan Kecamatan. :'+error,
         status: false
     });
     } finally {

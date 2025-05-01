@@ -1,10 +1,7 @@
-import { getServerAuthToken } from "@/app/utils/getToken.server";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
 import AdminProfile from "./components/Profil";
 import { UsersResource } from "@/types/users";
-import { API_ENDPOINT } from "@/config/api";
-import decodeJWT from "@/app/utils/decodeJwt";
 
 // Komponen utama Dashboard
 export default async function Profil({user,token} : {user:UsersResource,token:string}) {

@@ -7,21 +7,34 @@ import { useEffect, useState } from 'react'
 import useGeolocation from '@/hooks/useGeoLocation'
 import { useSendLocation } from '@/hooks/useSendLocation'
 
-export default function ProductGalon({ depots, decoded, user_token, user_location }:
+export default function ProductGalon({ depots, decoded, user_token,id}:
    { depots: ProductsResources[],
      decoded: UserToken | null,
      user_token: string,
-     user_location: UserLocation | null }) {
+     id:number
+    }) {
+
 
   const [checkingLocation, setCheckingLocation] = useState(false);
-  const { latitude, longitude, location, error, startGeolocationWatch } = useGeolocation();
-  const { sendLocation } = useSendLocation();
-
-
+  const { latitude, longitude, startGeolocationWatch } = useGeolocation();
+  const { sendLocation,fetchCheckUserLocation } = useSendLocation();
+  const [userLocation,setUserLocation] =useState<UserLocation>({
+    id: 0,
+    user_id: 0,
+    longitude: 0,
+    latitude: 0
+  });
+  const checkLocation = async() =>{
+    const res = await fetchCheckUserLocation(id, user_token);
+    if (res?.status && res.data) {
+        setUserLocation(res.data)
+    }
+  } 
   useEffect(() => {
     if (latitude && longitude) {
       handleSendLocation();
     }
+    checkLocation();
   }, [latitude, longitude]);
 
   const handleSendLocation = async () => {
@@ -70,7 +83,7 @@ export default function ProductGalon({ depots, decoded, user_token, user_locatio
         </div>
 
         {/* Cek apakah user_location ada atau id user_location 0 */}
-        {user_location?.id === 0 ? (
+        {userLocation?.id === 0 ? (
           <div className="text-center col-span-full">
             <p className="text-lg text-red-600 mb-4">
               Lokasi Anda belum terdaftar atau tidak terdeteksi. 
