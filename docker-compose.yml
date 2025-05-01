@@ -1,0 +1,13 @@
+services:
+  nextjs-prod:
+    container_name: nextjs-prod-app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: DockerFile.prod
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - prod

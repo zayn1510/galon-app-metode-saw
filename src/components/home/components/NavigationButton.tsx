@@ -1,12 +1,9 @@
 "use client"
 
-import { API_ENDPOINT } from '@/config/api'
 import { useSendLocation } from '@/hooks/useSendLocation'
-
 import { UserToken } from '@/types/login'
-import { UserLocationRequest } from '@/types/users'
 import { useEffect, useRef, useState } from 'react'
-import { MdDirections, MdGpsFixed, MdLocationDisabled } from 'react-icons/md'
+import { MdDirections,MdLocationDisabled } from 'react-icons/md'
 
 // Kalkulasi jarak antara dua titik koordinat (pakai rumus Haversine)
 function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {

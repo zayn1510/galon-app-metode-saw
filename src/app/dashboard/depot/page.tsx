@@ -1,5 +1,4 @@
 import Depot from "@/components/dashboard/depot/depot";
-import Kecamatan from "@/components/dashboard/kecamatan/kecamatan";
 import { fetchUserByUsername } from "@/lib/services/userService";
 import { Metadata } from "next";
 

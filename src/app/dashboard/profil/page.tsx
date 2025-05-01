@@ -1,6 +1,4 @@
 import { getServerAuthToken } from "@/app/utils/getToken.server";
-import Dashboard from "@/components/dashboard/dashboard";
-import AdminProfile from "@/components/dashboard/profil/components/Profil";
 import Profil from "@/components/dashboard/profil/Profil";
 import { fetchUserByUsername } from "@/lib/services/userService";
 import { Metadata } from "next";

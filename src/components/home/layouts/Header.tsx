@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { FaUser, FaSignOutAlt } from 'react-icons/fa'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { jwtDecode } from 'jwt-decode'
-import { TokenResource, UserToken } from '@/types/login'
+import { UserToken } from '@/types/login'
 import { UseAuthUser } from '@/hooks/useAuthUser'
 
 export default function Header({ decoded }: { decoded:UserToken| null }) {

@@ -1,7 +1,7 @@
 'use client'
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReactElement, useState,MouseEvent } from 'react';
-import { Lock, Mail, Key, X, User, Eye, EyeOff, UserIcon } from 'lucide-react';
+import { Lock, X, UserIcon } from 'lucide-react';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { LoginRequest, TokenResource } from '@/types/login';
 import { API_ENDPOINT } from '@/config/api';

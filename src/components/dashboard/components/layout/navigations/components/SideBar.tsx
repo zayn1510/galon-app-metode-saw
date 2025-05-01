@@ -3,7 +3,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { ChevronDown, ChevronUp, Menu, Bell, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Menu,X } from 'lucide-react';
 import { useMenu } from '../hooks/useMenu';
 import { useEffect, useState } from 'react';
 import { UsersResource } from '@/types/users';

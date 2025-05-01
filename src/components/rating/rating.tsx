@@ -1,15 +1,13 @@
 'use client'
 import React, { useState } from "react";
-import { FaStar, FaRegStar, FaSmile, FaFrown, FaMeh, FaPaperPlane, FaUserCircle, FaReply, FaEllipsisH } from "react-icons/fa";
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { FaStar, FaRegStar, FaSmile, FaFrown, FaMeh, FaPaperPlane} from "react-icons/fa";
 type RatingRequest = {
     user_id?:number,
     depot_id?:number,
     komentar?:string,
     rating?:number
 }
-const CommentForm = (req:RatingRequest) => {
+const CommentForm = ({user_id}:{user_id:number}) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");

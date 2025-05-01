@@ -1,7 +1,6 @@
 import decodeJWT from "@/app/utils/decodeJwt";
 import { getServerAuthToken } from "@/app/utils/getToken.server";
 import { API_ENDPOINT } from "@/config/api";
-import { LoginLastResource } from "@/types/login";
 import { UsersResource } from "@/types/users";
 
 

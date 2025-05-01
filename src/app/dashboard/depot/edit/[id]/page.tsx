@@ -1,4 +1,3 @@
-import CreateDepot from "@/components/dashboard/depot/CreateDepot";
 import EditDepot from "@/components/dashboard/depot/EditDepot";
 import { fetchUserByUsername } from "@/lib/services/userService";
 import { Metadata } from "next";

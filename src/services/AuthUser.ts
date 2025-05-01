@@ -1,5 +1,5 @@
 import { API_ENDPOINT } from "@/config/api";
-import { UpdateUserRequest, UserRequest } from "@/types/users";
+import { UpdatePasswordRequest, UpdateUserRequest, UserRequest } from "@/types/users";
 
 const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
 
@@ -81,5 +81,16 @@ export const Updateuser = async (id:number,user:UpdateUserRequest,token:string):
         body : JSON.stringify(user)
     })
     return res;
+}
+export const UpdatePassword = async (update:UpdatePasswordRequest): Promise<Response> => {
+  const res = await fetch(API_ENDPOINT.auth+"/update-password",{
+      method : "PUT",
+      headers: {
+          "Content-Type": "application/json",
+        },
+      credentials:"include",
+      body : JSON.stringify(update)
+  })
+  return res;
 }
 

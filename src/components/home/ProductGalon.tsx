@@ -1,15 +1,11 @@
 'use client'
-import Image from 'next/image'
-import { FaMapMarkerAlt, FaStar, FaShoppingCart, FaWhatsapp } from 'react-icons/fa'
+
 import ProductCard from './components/ProductCard'
-import NavigationButtons from './components/NavigationButton'
-import { TokenResource, UserProfil, UserToken } from '@/types/login'
-import { API_ENDPOINT } from '@/config/api'
+import { UserToken } from '@/types/login'
 import { UserLocation } from '@/types/users'
 import { useEffect, useState } from 'react'
 import useGeolocation from '@/hooks/useGeoLocation'
 import { useSendLocation } from '@/hooks/useSendLocation'
-import { Ratings } from '@/types/rating'
 
 export default function ProductGalon({ depots, decoded, user_token, user_location }:
    { depots: ProductsResources[],

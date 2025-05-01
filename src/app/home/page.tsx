@@ -1,8 +1,6 @@
-import ProductGalon from "@/components/home/ProductGalon";
 import HeroSection from "@/components/home/Hero";
 import Footer from "@/components/home/layouts/Footer";
 import Header from "@/components/home/layouts/Header";
-import Testimonials from "@/components/home/Testimonials";
 import WhyUs from "@/components/home/WhyUs";
 
 
@@ -12,6 +10,7 @@ import { Ratings } from "@/types/rating";
 import { getServerAuthTokenUser } from "../utils/getToken.server";
 import { jwtDecode } from "jwt-decode";
 import { UserToken } from "@/types/login";
+import TestimonialGrid from "@/components/home/Testimonials";
 
 
 export async function getRatings(): Promise<Ratings[]>{
@@ -20,9 +19,9 @@ export async function getRatings(): Promise<Ratings[]>{
         page: "0",
         limit: "3",
       });
-      
+    
       const res = await fetch(`${API_ENDPOINT.user}user/rating?${params.toString()}`);
-
+      console.info(res);
   const result = await res.json();
 
   if (!res.ok) {
@@ -47,7 +46,7 @@ export default async function HomePage(){
        <Header decoded={decoded}/>
        <HeroSection user_token={user_token}/>
        <WhyUs/>
-       <Testimonials initData={ratings}/>
+       <TestimonialGrid initData={ratings}/>
        <Footer />
        </>
     )

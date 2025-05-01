@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AtSymbolIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { LoginRequest, TokenResource } from '@/types/login';
 import { API_ENDPOINT } from '@/config/api';
 
@@ -212,7 +212,7 @@ export default function Login() {
         </form>
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-          Don't have an account?{' '}
+          Dont have an account?
           <a
             href="#"
             className="font-medium text-blue-600 hover:underline dark:text-blue-400"
