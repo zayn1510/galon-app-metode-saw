@@ -6,18 +6,6 @@ import { useEffect, useRef, useState } from 'react'
 import { MdDirections,MdLocationDisabled } from 'react-icons/md'
 
 // Kalkulasi jarak antara dua titik koordinat (pakai rumus Haversine)
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const toRad = (value: number) => (value * Math.PI) / 180
-  const R = 6371e3 // Radius bumi dalam meter
-  const dLat = toRad(lat2 - lat1)
-  const dLon = toRad(lon2 - lon1)
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  return R * c // jarak dalam meter
-}
 
 type Location = {
   latitude: number
@@ -32,8 +20,6 @@ export default function NavigationButtons({ productLocation, decoded,user_token 
   const [latitude, setLatitude] = useState(0)
   const [longitude, setLongitude] = useState(0)
 
-  const lastSentLat = useRef(0)
-  const lastSentLon = useRef(0)
   const debounceTimer = useRef<NodeJS.Timeout | null>(null)
   const { sendLocation } = useSendLocation();
   const openNavigationWithUserLocation = async () => {
@@ -70,20 +56,7 @@ export default function NavigationButtons({ productLocation, decoded,user_token 
         setLatitude(lat);
         setLongitude(lon);
         setLocation(`Latitude: ${lat}, Longitude: ${lon}, Akurasi: ${accuracy} meter`);
-
-        // Cek jarak perubahan dari lokasi terakhir
-        const distance = calculateDistance(lastSentLat.current, lastSentLon.current, lat, lon);
-
-        if (distance >= 5) { // baru kirim kalau pindah >= 5 meter
-          if (debounceTimer.current) {
-            clearTimeout(debounceTimer.current);
-          }
-
-          debounceTimer.current = setTimeout(() => {
-            lastSentLat.current = lat;
-            lastSentLon.current = lon;
-          }, 5000); // debounce 5 detik
-        }
+  
       },
       (err) => {
         switch (err.code) {

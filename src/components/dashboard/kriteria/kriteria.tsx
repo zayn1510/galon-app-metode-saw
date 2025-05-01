@@ -1,16 +1,13 @@
 "use client";
 
-import Table from "@/components/tables/components/basicTable";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
-import StatsCard from "../components/layout/navigations/components/StatsCard";
 import { API_ENDPOINT } from "@/config/api";
 import { useEffect, useState } from "react";
 import KriteriaModal from "./components/KriteriaModal";
 import Pagination from "../components/Pagination";
 import KriteriaCard from "./components/KriteriaCard";
 import TableControlsBasic from "@/components/tables/components/TableControlBasic";
-import { paginationData } from "@/types/pagination";
 import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
 import { UsersResource } from "@/types/users";
@@ -75,13 +72,13 @@ export default function Kriteria({user}:Props) {
 
             // Optional fallback sorting
             const sortedData = [...data].sort((a, b) => {
-              const aVal = (a as any)[table.sortColumn];
-              const bVal = (b as any)[table.sortColumn];
-              if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
-              if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
-              return 0;
-            });
-
+                           const aVal = a[table.sortColumn as keyof Kriteria];
+                           const bVal = b[table.sortColumn as keyof Kriteria];
+                         
+                           if (aVal! < bVal!) return table.sortOrder === "asc" ? -1 : 1;
+                           if (aVal! > bVal!) return table.sortOrder === "asc" ? 1 : -1;
+                           return 0;
+                         });
             if (sortedData.length === 0) {
                 setMessage({ text: "No Data...", status: false });
             }

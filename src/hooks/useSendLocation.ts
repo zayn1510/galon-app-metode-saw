@@ -43,7 +43,7 @@ export const useSendLocation = () => {
         }
       }
       return data;
-    } catch (err: any) {
+    } catch (err) {
       console.error("Error fetching user location:", err);
       
     } finally {

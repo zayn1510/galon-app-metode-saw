@@ -1,13 +1,11 @@
 "use client";
 
-import Table from "@/components/tables/components/basicTable";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
 import { API_ENDPOINT } from "@/config/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Pagination from "../components/Pagination";
 import TableControlsBasic from "@/components/tables/components/TableControlBasic";
-import { Plus } from "lucide-react";
 import useTableControl from "@/hooks/useTablePagination";
 import { UsersResource } from "@/types/users";
 import UsersCard from "./components/UsersCard";
@@ -28,52 +26,51 @@ export default function Users({user}:{user:UsersResource}) {
       setSortOrder
     } = useTableControl({sortColumn:"name",sortOrder:"asc"})
     // Handlers
-    const handleSetMessage = (message: { text: string; status: boolean | null }) => {
-      setMessage(message);
-    };
 
 
     // Fetch data
-    const GetUsers = async () => {
-        try {
-            const queryParams = new URLSearchParams({
-                page: table.page.toString(),
-                limit: table.limit.toString(),
-                filter: table.filter,
-                sortColumn: table.sortColumn,
-                sortOrder: table.sortOrder
-            });
 
-            const res = await fetch(`${API_ENDPOINT.users}?${queryParams.toString()}`,{
-                method : "GET",
-                credentials:"include"
-            });
-            const result = await res.json();
-            const data: UsersResource[] = result.data;
-
-            const sortedData = [...data].sort((a, b) => {
-              const aVal = (a as any)[table.sortColumn];
-              const bVal = (b as any)[table.sortColumn];
-              if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
-              if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
-              return 0;
-            });
-
-            if (sortedData.length === 0) {
-                setMessage({ text: "No Data...", status: false });
-            }
-            setUsersList(sortedData);
-            setTotalData(result.total);
-        } catch (error) {
-            console.error(error);
-            setMessage({ text: "Failed to fetch data in server", status: true });
+    const GetUsers = useCallback(async () => {
+      try {
+        const queryParams = new URLSearchParams({
+          page: table.page.toString(),
+          limit: table.limit.toString(),
+          filter: table.filter,
+          sortColumn: table.sortColumn,
+          sortOrder: table.sortOrder,
+        });
+    
+        const res = await fetch(`${API_ENDPOINT.users}?${queryParams.toString()}`, {
+          method: "GET",
+          credentials: "include",
+        });
+        const result = await res.json();
+        const data: UsersResource[] = result.data;
+    
+        const sortedData = [...data].sort((a, b) => {
+          const aVal = a[table.sortColumn as keyof UsersResource];
+          const bVal = b[table.sortColumn as keyof UsersResource];
+          if (aVal! < bVal!) return table.sortOrder === "asc" ? -1 : 1;
+          if (aVal! > bVal!) return table.sortOrder === "asc" ? 1 : -1;
+          return 0;
+        });
+    
+        if (sortedData.length === 0) {
+          setMessage({ text: "No Data...", status: false });
         }
-    };
+        setUsersList(sortedData);
+        setTotalData(result.total);
+      } catch (error) {
+        console.error(error);
+        setMessage({ text: "Failed to fetch data in server", status: true });
+      }
+    }, [table.page, table.limit, table.filter, table.sortColumn, table.sortOrder, API_ENDPOINT.users]);
+    
 
     useEffect(() => {
-      GetUsers();
-    }, [table.page, table.limit, table.filter, table.sortColumn, table.sortOrder]);
-  
+        GetUsers();
+    }, [GetUsers]);
+      
     return (
         <div className="flex h-screen">
             <Sidebar user={user} />

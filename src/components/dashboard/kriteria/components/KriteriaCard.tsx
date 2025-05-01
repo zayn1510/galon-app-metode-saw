@@ -92,11 +92,11 @@ export default function KriteraCard({ data,refreshData,message,setMessage,curren
         }
     } catch (error) {
         setMessage({
-            text: "Terjadi kesalahan, coba lagi nanti.",
+            text: "Terjadi kesalahan, coba lagi nanti. "+error,
             status:false,
           });
     } finally {
-      const index = data.findIndex(d => d.id === item.id);
+      data.findIndex(d => d.id === item.id);
       const isLastItemOnPage = data.length === 1;
       
       if (currentPage > 1 && isLastItemOnPage) {

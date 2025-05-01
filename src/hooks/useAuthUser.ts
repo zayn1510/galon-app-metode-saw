@@ -6,7 +6,7 @@ export const UseAuthUser = () => {
         try {
             const response = await Logout();
             return response;
-        } catch (err: any) {
+        } catch (err) {
           console.error("Logout error:", err);
           throw err; 
         }
@@ -16,7 +16,7 @@ export const UseAuthUser = () => {
         try {
             const response = await LogoutAdmin();
             return response;
-        } catch (err: any) {
+        } catch (err) {
           console.error("Logout error:", err);
           throw err; 
         }

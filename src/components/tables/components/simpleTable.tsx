@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function SimpleTable() {
   // Data contoh
-  const [data, setData] = useState([
+  const [data] = useState([
     {
       id: 1,
       nama: 'Budi Santoso',

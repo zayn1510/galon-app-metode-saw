@@ -6,6 +6,8 @@ import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { LoginRequest, TokenResource } from '@/types/login';
 import { API_ENDPOINT } from '@/config/api';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
+import { text } from 'stream/consumers';
 interface AuthModalProps {
   show: boolean;
   onClose: () => void;
@@ -13,8 +15,7 @@ interface AuthModalProps {
 
 const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
   const router = useRouter();
-  const [isLoginView, setIsLoginView] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
+  const [isLoginView] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -24,10 +25,6 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
     text: "",
     status: null
   });
-
-  const toggleView = () => setIsLoginView(!isLoginView);
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -49,8 +46,6 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
            username: formData.username,
            password: formData.password
          };
-
-       
          const res = await fetch(`${API_ENDPOINT.auth}/login`, {
            method: 'POST',
            headers: { 
@@ -59,10 +54,10 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
            credentials: 'include',
            body: JSON.stringify(payload),
          });
-         if (!res.ok) {
-           const errorData = await res.json();
-           console.error(errorData);
-           throw new Error(errorData.message || "Login failed");
+         if (res.status === 500) {
+           const data = await res.json();
+           setMessage({text:"Login Gagal",status:true})
+           return;
          }
    
          const result = await res.json();
@@ -79,7 +74,6 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
          if (!tokenResponse.ok) {
            throw new Error("Failed to set authentication token");
          }
-   
          setMessage({ text: 'Login successful! Redirecting...', status: true });
          
          if (data.role !=='admin') {
@@ -99,13 +93,15 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
        }
   };
 
-  const daftarAkun = (event: MouseEvent<HTMLButtonElement>): void => {
+  const daftarAkun = (): void => {
     window.location.href = "signup";
   }
   return (
+    
     <AnimatePresence>
       {show && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+         
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -131,6 +127,19 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
               <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
                 Masuk Akun
               </h3>
+
+              {/* Alert Message */}
+              {message && (
+                <div
+                  className={`mb-4 px-4 py-3 rounded-lg text-sm text-center font-medium ${
+                    message.status
+                      ? 'bg-green-100 text-green-700 border border-green-200'
+                      : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              )}
 
               {/* Form */}
               <form onSubmit={handleLogin} className="space-y-6">

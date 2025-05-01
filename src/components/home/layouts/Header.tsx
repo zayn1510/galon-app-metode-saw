@@ -90,7 +90,6 @@ export default function Header({ decoded }: { decoded:UserToken| null }) {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <NavLink href="#produk">Produk</NavLink>
             <NavLink href="#testimoni">Testimoni</NavLink>
             <NavLink href="#kontak">Kontak</NavLink>
 

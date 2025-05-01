@@ -58,16 +58,15 @@ export default function TestimonialGrid({initData}:{initData:Ratings[]}) {
   }, [isLoading, hasMore, loadMoreTestimonials]);
 
   useEffect(() => {
-    // Debounce scroll event
     const debouncedCheckScroll = () => {
-      let timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(checkScroll, 200);
+      const timeout = setTimeout(checkScroll, 200);
+      return () => clearTimeout(timeout);
     };
-
+  
     window.addEventListener('scroll', debouncedCheckScroll);
     return () => window.removeEventListener('scroll', debouncedCheckScroll);
   }, [checkScroll]);
+  
 
   // Initial loading effect
   useEffect(() => {

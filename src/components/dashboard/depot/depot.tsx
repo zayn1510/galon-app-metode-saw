@@ -1,14 +1,9 @@
 "use client"
-
-import Table from "@/components/tables/components/basicTable";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
-import StatsCard from "../components/layout/navigations/components/StatsCard";
 import { API_ENDPOINT } from "@/config/api";
 import { useEffect, useState } from "react";
-
 import Pagination from "../components/Pagination";
-
 import { DepotResource } from "@/types/depot";
 import DepotCard from "./components/DepotCard";
 import { useRouter } from "next/navigation";
@@ -28,7 +23,6 @@ export default function Depot({user}:Props) {
     const router = useRouter()
     const [depotList,setDepotList] = useState<DepotResource[]>([])
     const [jumlahdepot,setJumlahDepot] = useState<JumlahKecamatanResource[]>([])
-    const [modalOpen, setModalOpen] = useState(false);
     const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
         text: "",
         status: null,
@@ -42,13 +36,7 @@ export default function Depot({user}:Props) {
          setSortColumn,
          setSortOrder
        } = useTableControl({sortColumn:"nama_depot",sortOrder:"asc"})
-    
 
-    const handleSetMessage = (message: { text: string; status: boolean | null }) => {
-        setMessage(message);
-      };
-
-    
     const GetDepot = async () => {
         try {
           
@@ -78,10 +66,11 @@ export default function Depot({user}:Props) {
             }
                // Optional fallback sorting
                const sortedData = [...data].sort((a, b) => {
-                const aVal = (a as any)[table.sortColumn];
-                const bVal = (b as any)[table.sortColumn];
-                if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
-                if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
+                const aVal = a[table.sortColumn as keyof DepotResource];
+                const bVal = b[table.sortColumn as keyof DepotResource];
+              
+                if (aVal! < bVal!) return table.sortOrder === "asc" ? -1 : 1;
+                if (aVal! > bVal!) return table.sortOrder === "asc" ? 1 : -1;
                 return 0;
               });
             setDepotList(sortedData);

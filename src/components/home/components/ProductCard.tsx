@@ -8,14 +8,14 @@ import { UserToken } from '@/types/login'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useRatingDepot } from '@/hooks/useRatingDepot'
-import { RatingRequest, Ratings } from '@/types/rating'
+import { Ratings } from '@/types/rating'
 import RatingModal from '@/components/modals/RatingModal'
 
 export default function ProductCard({ product, decoded, user_token }: { product: ProductsResources, decoded: UserToken | null, user_token: string | null }) {
   const [isImageLoading, setIsImageLoading] = useState(true)
   const [showReviewsModal, setShowReviewsModal] = useState(false)
   const [showRatingModal,setShowRatingModal] = useState(false)
-  const [userLocation, setUserLocation] = useState<{ latitude: number, longitude: number } | null>(null)
+  const [, setUserLocation] = useState<{ latitude: number, longitude: number } | null>(null)
   const [reviews, setReviews] = useState<Ratings[]>([])
   const [page] = useState(0)
   const [limit] = useState(10)
