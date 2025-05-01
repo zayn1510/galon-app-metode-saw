@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { serialize } from 'cookie';
-
 export async function POST(req: NextRequest) {
   try {
     const { token } = await req.json();
@@ -25,7 +23,7 @@ export async function POST(req: NextRequest) {
     return response;
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: 'Internal server error' },
+      { success: false, message: 'Internal server error'+error },
       { status: 500 }
     );
   }

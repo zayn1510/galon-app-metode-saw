@@ -3,11 +3,9 @@
 import { API_ENDPOINT } from "@/config/api";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import KecamatanModal from "./KecamatanModal";
 import { Message } from "../../components/Message";
 import { DepotResource } from "@/types/depot";
 import { formatRupiah } from "@/config/utils";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -85,7 +83,7 @@ export default function DepotCard({
       }
     } catch (error) {
       setMessage({
-        text: "Terjadi kesalahan, coba lagi nanti.",
+        text: "Terjadi kesalahan, coba lagi nanti."+error,
         status: false,
       });
     } finally {

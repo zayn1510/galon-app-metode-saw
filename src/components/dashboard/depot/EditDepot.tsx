@@ -1,7 +1,6 @@
 import { UsersResource } from "@/types/users";
 import Header from "../components/layout/navigations/components/Header";
 import Sidebar from "../components/layout/navigations/components/SideBar";
-import FormDepot from "./components/FormDepot";
 import EditDepotForm from "./components/FormDepotEdit";
 
 export default function EditDepot({user}:{user:UsersResource}) {

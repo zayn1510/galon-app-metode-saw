@@ -1,10 +1,8 @@
 "use client"
 
-import Table from '../tables/components/basicTable';
 import Sidebar from './components/layout/navigations/components/SideBar';
 import Header from './components/layout/navigations/components/Header';
 import StatsCard from './components/layout/navigations/components/StatsCard';
-import MainContent from './components/layout/navigations/components/Content';
 import { UsersResource } from '@/types/users';
 import { useEffect, useState } from 'react';
 import useTableControl from '@/hooks/useTablePagination';
@@ -20,10 +18,6 @@ type Props = {
 // Komponen utama Dashboard
 export default function Dashboard({user}:Props) {
   const [totalData,setTotalData] = useState(0);
-  const [message, setMessage] = useState<{ text: string; status: boolean | null }>({
-    text: "",
-    status: null,
-});
   const {
         table,
         setPage,
@@ -55,29 +49,29 @@ export default function Dashboard({user}:Props) {
                 });
                 const result = await res.json();
                 if (res.status ==401) {
-                    setMessage({text:result.error,status:false})
+                  
                     return;
                 }
                 const data: LoginLastResource[] = result.data;
-    
+                interface TableData {
+                  [key: string]: string | number;
+                }
                 // Optional fallback sorting
-                const sortedData = [...data].sort((a, b) => {
-                  const aVal = (a as any)[table.sortColumn];
-                  const bVal = (b as any)[table.sortColumn];
+                const sortedData = [...data].sort((a: TableData, b: TableData) => {
+                  const aVal = a[table.sortColumn];
+                  const bVal = b[table.sortColumn];
+                
                   if (aVal < bVal) return table.sortOrder === "asc" ? -1 : 1;
                   if (aVal > bVal) return table.sortOrder === "asc" ? 1 : -1;
                   return 0;
                 });
     
-                if (sortedData.length === 0) {
-                    setMessage({ text: "No Data...", status: false });
-                }
-    
+
                 setLoginLogs(sortedData);
                 setTotalData(result.total);
             } catch (error) {
                 console.error(error);
-                setMessage({ text: "Failed to fetch data in server", status: true });
+               
             }
         };
     

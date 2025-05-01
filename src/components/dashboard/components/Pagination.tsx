@@ -9,7 +9,6 @@ type Props = {
 export default function Pagination({ currentPage, totalPages, onPageChange }: Props) {
   const getVisiblePages = () => {
     const visiblePages = [];
-    const maxVisible = 5; // Maximum number of visible page buttons
     
     // Always show first page
     visiblePages.push(1);
@@ -66,7 +65,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pr
       </button>
 
       {/* Page Number Buttons */}
-      {visiblePages.map((page, index) => {
+      {visiblePages.map((page) => {
         if (page === 'left-ellipsis' || page === 'right-ellipsis') {
           return (
             <span key={page} className="px-3 py-1 text-gray-500">

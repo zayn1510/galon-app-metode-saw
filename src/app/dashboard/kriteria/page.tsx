@@ -1,5 +1,3 @@
-
-import { getServerAuthToken } from "@/app/utils/getToken.server";
 import Kriteria from "@/components/dashboard/kriteria/kriteria";
 import { fetchUserByUsername } from "@/lib/services/userService";
 import { Metadata } from "next";

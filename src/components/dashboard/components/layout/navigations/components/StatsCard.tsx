@@ -5,7 +5,6 @@ import {
   ShoppingBagIcon, 
   UsersIcon,
   AdjustmentsHorizontalIcon,
-  ArrowTrendingUpIcon,
   ArrowPathIcon
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
@@ -57,13 +56,12 @@ export default function AnalyticsDashboard() {
     title, 
     value, 
     icon,
-    trend,
     loading 
   }: {
     title: string;
     value: number;
     icon: React.ReactNode;
-    trend?: number;
+
     loading: boolean;
   }) => (
     <div className="bg-white rounded-xl border border-gray-100 p-6 transition-all hover:shadow-sm hover:border-gray-200 group">
@@ -116,7 +114,7 @@ export default function AnalyticsDashboard() {
         title="Total Users"
         value={stats?.users || 0}
         icon={<UsersIcon className="h-6 w-6" />}
-        trend={12.5}
+     
         loading={loading}
       />
       <StatCard
@@ -129,7 +127,6 @@ export default function AnalyticsDashboard() {
         title="Depot Galon"
         value={stats?.depot || 0}
         icon={<ShoppingBagIcon className="h-6 w-6" />}
-        trend={3.2}
         loading={loading}
       />
       <StatCard

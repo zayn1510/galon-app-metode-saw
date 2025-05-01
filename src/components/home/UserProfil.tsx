@@ -1,7 +1,7 @@
 'use client'
 
 import { UseAuthUser } from '@/hooks/useAuthUser'
-import { UpdateUserRequest, UserRequest, UsersResource } from '@/types/users'
+import { UpdateUserRequest,UsersResource } from '@/types/users'
 import { useState } from 'react'
 
 type UserProfileProps = {

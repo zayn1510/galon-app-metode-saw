@@ -1,6 +1,5 @@
 import Dashboard from "@/components/dashboard/dashboard";
 import { Metadata } from "next";
-import { getServerAuthToken } from "../utils/getToken.server";
 import { fetchUserByUsername } from "@/lib/services/userService";
 
 

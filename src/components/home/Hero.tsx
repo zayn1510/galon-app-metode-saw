@@ -5,8 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { MouseEvent } from "react";
-import { getServerAuthToken } from "@/app/utils/getToken.server";
-import ProModal from "../modals/AuthModal";
 import { useRouter } from "next/navigation";
 import AuthModal from "../modals/AuthModal";
 interface Bubble {

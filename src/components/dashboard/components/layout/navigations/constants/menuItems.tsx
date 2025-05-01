@@ -5,11 +5,8 @@ import {
     File,
     Users,
     MapPin,
-    LocateFixed,
-    ShoppingBag,
     Package,
     Settings,
-    UserIcon
   } from 'lucide-react';
 
   

@@ -1,7 +1,7 @@
 type Card= {
     title:string,
     value:string,
-    icon:any,
+    icon: React.ReactNode; 
     color:string
 }
 

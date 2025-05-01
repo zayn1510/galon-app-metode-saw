@@ -1,10 +1,5 @@
-import Header from "@/components/dashboard/components/layout/navigations/components/Header";
-import Sidebar from "@/components/dashboard/components/layout/navigations/components/SideBar";
-import UserDetailCard from "@/components/dashboard/users/components/UserDetailCard";
 import UserDetail from "@/components/dashboard/users/UserDetail";
-import { API_ENDPOINT } from "@/config/api";
 import { fetchUserByUsername } from "@/lib/services/userService";
-import { UsersResource } from "@/types/users";
 import { Metadata } from "next";
 import React from "react";
 

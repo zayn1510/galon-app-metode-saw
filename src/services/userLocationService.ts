@@ -1,5 +1,5 @@
 import { API_ENDPOINT } from "@/config/api";
-import { UserLocation, UserLocationRequest } from "@/types/users";
+import {UserLocationRequest } from "@/types/users";
 
 export const sendUserLocation = async (
   payload: UserLocationRequest,

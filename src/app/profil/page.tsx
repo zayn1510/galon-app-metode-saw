@@ -1,18 +1,9 @@
-import ProductGalon from "@/components/home/ProductGalon";
-import HeroSection from "@/components/home/Hero";
 import Footer from "@/components/home/layouts/Footer";
 import Header from "@/components/home/layouts/Header";
-import Testimonials from "@/components/home/Testimonials";
 import WhyUs from "@/components/home/WhyUs";
-
-
-import { API_ENDPOINT } from "@/config/api";
-
-import { Ratings } from "@/types/rating";
 import { getServerAuthTokenUser } from "../utils/getToken.server";
 import { jwtDecode } from "jwt-decode";
 import { UserToken } from "@/types/login";
-import Profil from "@/components/dashboard/profil/Profil";
 import UserProfil from "@/components/home/UserProfil";
 import { UseAuthUser } from "@/hooks/useAuthUser";
 import { UsersResource } from "@/types/users";
@@ -45,7 +36,6 @@ export default async function ProfilPage(){
   if (data.status && data.data) {
       user = data.data;
   }
-   console.info(user);
     return (
        <>
        <Header decoded={decoded}/>

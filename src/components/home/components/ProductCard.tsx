@@ -8,11 +8,13 @@ import { UserToken } from '@/types/login'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useRatingDepot } from '@/hooks/useRatingDepot'
-import { Ratings } from '@/types/rating'
+import { RatingRequest, Ratings } from '@/types/rating'
+import RatingModal from '@/components/modals/RatingModal'
 
 export default function ProductCard({ product, decoded, user_token }: { product: ProductsResources, decoded: UserToken | null, user_token: string | null }) {
   const [isImageLoading, setIsImageLoading] = useState(true)
   const [showReviewsModal, setShowReviewsModal] = useState(false)
+  const [showRatingModal,setShowRatingModal] = useState(false)
   const [userLocation, setUserLocation] = useState<{ latitude: number, longitude: number } | null>(null)
   const [reviews, setReviews] = useState<Ratings[]>([])
   const [page] = useState(0)
@@ -25,7 +27,7 @@ export default function ProductCard({ product, decoded, user_token }: { product:
   const { GetRatingDepot } = useRatingDepot()
 
   const handleGiveRating = () => {
-    window.location.href = "/rating"
+    setShowRatingModal(true);
   }
 
   const toggleReviewsModal = async (id_depot: number) => {
@@ -37,6 +39,7 @@ export default function ProductCard({ product, decoded, user_token }: { product:
     }
     setShowReviewsModal(!showReviewsModal)
   }
+ 
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -56,6 +59,17 @@ export default function ProductCard({ product, decoded, user_token }: { product:
 
   return (
     <>
+<RatingModal
+        UserToken={user_token ? user_token : null}
+        isOpen={showRatingModal}
+        onClose={() => setShowRatingModal(false)}
+        productName={product.depot}
+        productImage={product.image}
+        ProductId = {product.id_depot}
+        UserId = {decoded ? decoded.id : 0}
+        ProductUpdatedAt={product.updated_at}
+      />
+
       {/* Product Card */}
       <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-blue-100 flex flex-col h-full overflow-hidden">
         <div className="relative aspect-square w-full bg-gray-50">
