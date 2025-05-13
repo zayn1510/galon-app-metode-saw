@@ -1,3 +1,4 @@
+import { getServerAuthToken } from "@/app/utils/getToken.server";
 import { API_ENDPOINT } from "@/config/api";
 import { UpdatePasswordRequest, UpdateUserRequest, UserRequest } from "@/types/users";
 
@@ -93,4 +94,17 @@ export const UpdatePassword = async (update:UpdatePasswordRequest): Promise<Resp
   })
   return res;
 }
+
+export async function fetchUserById(id:number): Promise<Response> {
+  const res = await fetch(`${API_ENDPOINT.users}/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials:"include",
+  });
+
+  return res;
+}
+
 

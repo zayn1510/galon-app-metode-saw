@@ -1,4 +1,5 @@
-import { Detailuser, Logout, LogoutAdmin, SignUp, UpdatePassword, Updateuser } from "@/services/AuthUser";
+
+import { Detailuser, fetchUserById, Logout, LogoutAdmin, SignUp, UpdatePassword, Updateuser } from "@/services/AuthUser";
 import { UpdatePasswordRequest, UpdateUserRequest, UserRequest } from "@/types/users";
 
 export const UseAuthUser = () => {
@@ -76,7 +77,21 @@ export const UseAuthUser = () => {
           throw error;
         }
       }
+
+      const detailUserById = async (id:number): Promise<ApiResponse<null>> => {
+        try {
+            const response = await fetchUserById(id)
+            const data: ApiResponse<null> = await response.json();
+            if (!response.ok) {
+                throw new Error("error in server :"+data.message)
+            }
+            return data;
+        } catch (error) {
+          console.error("error:", error);
+          throw error;
+        }
+      }
       
       
-    return {logout,signUp,detailUser,updateUser,logoutAdmin,updatePassword};
+    return {logout,signUp,detailUser,updateUser,logoutAdmin,updatePassword,detailUserById};
 }

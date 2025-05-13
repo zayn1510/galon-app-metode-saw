@@ -2,27 +2,49 @@
 import { AtSignIcon, ChevronLeftIcon, CircleDotIcon, HashIcon, MailIcon, SaveIcon, ShieldIcon, UserIcon } from "lucide-react";
 import DetailRow from "./DetailRow";
 import { UsersResource } from "@/types/users";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { API_ENDPOINT } from "@/config/api";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { UseAuthUser } from "@/hooks/useAuthUser";
 
-type Props = {
-    user: UsersResource
-    id: number
-}
 
-export default function UserDetailCard({ user, id }: Props) {
+
+export default function UserDetailCard() {
     const router = useRouter()
-    const [status, setStatus] = useState(user?.status || '');
+    const [status, setStatus] = useState('');
     const [isUpdating, setIsUpdating] = useState(false);
-
+    const params = useParams();
+    const id = params?.id ? parseInt(params.id as string, 10) : null;
+    const {detailUserById} = UseAuthUser();
+    const [user,setUser] = useState<UsersResource>({
+        username:'',
+        email:'',
+        id:0,
+        name:'',
+        nomor_handphone:'',
+        role:'',
+        status:''
+    });
+    const getUserProfil = async()=>{
+        try {
+            if (id) {
+                const response = await detailUserById(id);
+                if(response && response.data){
+                    setUser(response.data); 
+                }
+                
+            }
+           
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    useEffect(()=>{
+        getUserProfil();
+    },[id]);
     // Safe fallbacks for user data
-    const userName = user?.name || 'Unknown';
-    const userInitial = userName.charAt(0).toUpperCase();
-    const userEmail = user?.email || 'No email provided';
-    const userUsername = user?.username ? `@${user.username}` : 'No username';
-    const userRole = user?.role || 'Unknown role';
+   
     const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setStatus(e.target.value);
     };
@@ -42,20 +64,23 @@ export default function UserDetailCard({ user, id }: Props) {
 
     const handleUpdate = async () => {
         try {
-            setIsUpdating(true);
-            const response = await fetch(`${API_ENDPOINT.users}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ status }),
-                credentials:"include"
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update user status');
+            if (status) {
+                setIsUpdating(true);
+                const response = await fetch(`${API_ENDPOINT.users}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status }),
+                    credentials:"include"
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to update user status');
+                }
+                location.reload();
             }
-            router.refresh();
+           
         } catch (error) {
             console.error('Update error:', error);
         } finally {
@@ -64,6 +89,7 @@ export default function UserDetailCard({ user, id }: Props) {
     };
 
     return (
+      
         <div className="max-w-2xl mx-auto">
             <div className="mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">User Details</h1>
@@ -74,11 +100,11 @@ export default function UserDetailCard({ user, id }: Props) {
                 <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-indigo-50 to-purple-50">
                     <div className="flex items-center space-x-4">
                         <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-2xl font-bold">
-                            {userInitial}
+                            {user?.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                            <h2 className="text-xl font-semibold text-gray-800">{userName}</h2>
-                            <p className="text-gray-500">{userRole}</p>
+                            <h2 className="text-xl font-semibold text-gray-800">{user?.name}</h2>
+                            <p className="text-gray-500">{user?.role}</p>
                         </div>
                     </div>
                 </div>
@@ -92,28 +118,19 @@ export default function UserDetailCard({ user, id }: Props) {
                     <DetailRow
                         icon={<UserIcon size={18} className="text-indigo-500" />}
                         label="Name"
-                        value={userName}
-                    />
-                    <DetailRow
-                        icon={<MailIcon size={18} className="text-indigo-500" />}
-                        label="Email"
-                        value={
-                            <a href={`mailto:${userEmail}`} className="text-indigo-600 hover:underline">
-                                {userEmail}
-                            </a>
-                        }
+                        value={user?.name}
                     />
                     <DetailRow
                         icon={<AtSignIcon size={18} className="text-indigo-500" />}
                         label="Username"
-                        value={userUsername}
+                        value={user?.username}
                     />
                     <DetailRow
                         icon={<ShieldIcon size={18} className="text-indigo-500" />}
                         label="Role"
                         value={
                             <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                {userRole}
+                                {user?.role}
                             </span>
                         }
                     />
@@ -123,7 +140,7 @@ export default function UserDetailCard({ user, id }: Props) {
                         value={
                             <div className="relative">
                                 <select
-                                    value={status}
+                                    value={user.status}
                                     onChange={handleStatusChange}
                                     className={`block w-full pl-3 pr-10 py-2 text-base border rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-200 ${getStatusStyle(status)}`}
                                 >

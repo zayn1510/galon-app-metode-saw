@@ -21,9 +21,10 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<{ text: string, status: boolean | null }>({
+  const [message, setMessage] = useState<{ text: string, status: boolean | null,danger:boolean }>({
     text: "",
-    status: null
+    status: false,
+    danger:false
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,12 +35,12 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
     e.preventDefault();
     // Basic validation
        if (!formData.username || !formData.password) {
-         setMessage({ text: "Username and password are required", status: false });
+         setMessage({ text: "Username and password are required", status: false,danger:true });
          return;
        }
    
        setIsLoading(true);
-       setMessage({ text: "", status: null });
+       setMessage({ text: "", status: false,danger:false });
    
        try {
          const payload: LoginRequest = {
@@ -55,12 +56,27 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
            body: JSON.stringify(payload),
          });
          if (res.status === 500) {
-           const data = await res.json();
-           setMessage({text:"Login Gagal",status:true})
+           setMessage({text:"Login Gagal",status:true,danger:true})
            return;
          }
    
          const result = await res.json();
+         if (result.data.status === 'inactive') {
+          setMessage({
+            text: "Akun Anda tidak aktif. Silakan hubungi admin atau customer support untuk informasi lebih lanjut.",
+            status: true,
+            danger: true,
+          });
+          return;
+        } else if (result.data.status === 'banned') {
+          setMessage({
+            text: "Akun Anda telah diblokir. Silakan hubungi admin atau customer support untuk bantuan.",
+            status: true,
+            danger: true,
+          });
+          return;
+        }
+        
          const data: TokenResource = result.data;
          // Set token via API route
          const tokenResponse = await fetch('/api/set-token-user', {
@@ -74,11 +90,11 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
          if (!tokenResponse.ok) {
            throw new Error("Failed to set authentication token");
          }
-         setMessage({ text: 'Login successful! Redirecting...', status: true });
+         setMessage({ text: 'Login successful! Redirecting...', status: true,danger:false });
          
          if (data.role !=='admin') {
             router.push("galon");
-        }
+         }
   
          
    
@@ -86,7 +102,8 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
          console.error('Login error:', error);
          setMessage({ 
            text: error instanceof Error ? error.message : 'Something went wrong', 
-           status: false 
+           status: false ,
+           danger:true
          });
        } finally {
          setIsLoading(false);
@@ -129,10 +146,10 @@ const AuthModal = ({ show, onClose}: AuthModalProps): ReactElement => {
               </h3>
 
               {/* Alert Message */}
-              {message && (
+              {message.status && (
                 <div
                   className={`mb-4 px-4 py-3 rounded-lg text-sm text-center font-medium ${
-                    message.status
+                    !message.danger
                       ? 'bg-green-100 text-green-700 border border-green-200'
                       : 'bg-red-100 text-red-700 border border-red-200'
                   }`}

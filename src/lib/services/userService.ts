@@ -8,7 +8,6 @@ export async function fetchUserByUsername(): Promise<UsersResource> {
   const token = await getServerAuthToken();
   const decode = decodeJWT(token);
   const username = decode.username;
-
   const res = await fetch(`${API_ENDPOINT.users}/by/${username}`, {
     method: "GET",
     headers: {
@@ -25,4 +24,5 @@ export async function fetchUserByUsername(): Promise<UsersResource> {
 
   return result.data;
 }
+
 
